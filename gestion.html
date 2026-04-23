@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>CEMZA | DMS Enterprise Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f172a; --accent: #2563eb; --sidebar-bg: #0f172a;
+            --main-bg: #f8fafc; --text-dark: #0f172a; --text-light: #64748b; --danger: #ef4444;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--main-bg); display: flex; color: var(--text-dark); min-height: 100vh; }
+
+        /* SIDEBAR */
+        .sidebar { width: 260px; background: var(--sidebar-bg); height: 100vh; position: fixed; display: flex; flex-direction: column; padding: 30px 20px; color: white; z-index: 100; }
+        .logo { font-size: 24px; font-weight: 800; letter-spacing: -1px; margin-bottom: 50px; }
+        .logo span { color: var(--accent); }
+        .nav-item { padding: 14px 18px; border-radius: 12px; margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: 0.3s; color: #94a3b8; }
+        .nav-item:hover { background: rgba(255,255,255,0.05); color: white; }
+        .nav-item.active { background: var(--accent); color: white; }
+        .nav-item svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+        /* MAIN */
+        .main { margin-left: 260px; flex: 1; padding: 40px; }
+        .view { display: none; }
+        .view.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .card { background: white; border-radius: 20px; padding: 30px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 20px; }
+        h1 { font-size: 26px; font-weight: 800; margin-bottom: 25px; }
+
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        .full { grid-column: span 4; }
+        .half { grid-column: span 2; }
+        
+        .input-group { display: flex; flex-direction: column; gap: 6px; }
+        label { font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase; }
+
+        input, select, textarea { padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px; background: #f8fafc; transition: 0.2s; }
+        input:focus { outline: none; border-color: var(--accent); background: white; }
+
+        .btn { background: var(--primary); color: white; padding: 14px; border-radius: 10px; font-weight: 700; border: none; cursor: pointer; transition: 0.3s; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        
+        .btn-edit { background: #f1f5f9; color: var(--primary); padding: 6px 12px; font-size: 11px; margin-right: 5px; border-radius: 6px; font-weight: 700; cursor: pointer; border: none; }
+        .btn-del { background: #fee2e2; color: var(--danger); padding: 6px 12px; font-size: 11px; border-radius: 6px; font-weight: 700; cursor: pointer; border: none; }
+
+        .section-divider { grid-column: 1/-1; padding: 15px 0 5px 0; border-bottom: 2px solid #f1f5f9; margin-bottom: 10px; font-size: 12px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+
+        table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+        td { background: white; padding: 15px; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
+        tr td:first-child { border-left: 1px solid #e2e8f0; border-radius: 10px 0 0 10px; }
+        tr td:last-child { border-right: 1px solid #e2e8f0; border-radius: 0 10px 10px 0; text-align: right; }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="logo">CEMZA<span>.</span>DMS</div>
+        <div class="nav-item active" onclick="switchView('view-autos', this)">
+            <svg viewBox="0 0 24 24"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.7 8.2c-.2-.5-.8-.8-1.3-.8H6.6c-.5 0-1.1.3-1.3.8l-2.8 2.9C1.7 11.3 1 12.1 1 13v3c0 .6.4 1 1 1h2m10 0h4M5 17h10m-10 0a3 3 0 110 6 3 3 0 010-6zm10 0a3 3 0 110 6 3 3 0 010-6z"/></svg>
+            Inventario
+        </div>
+        <div class="nav-item" onclick="switchView('view-clientes', this)">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2m8-10a4 4 0 100-8 4 4 0 000 8z"/></svg>
+            Clientes
+        </div>
+        <div class="nav-item" onclick="switchView('view-contratos', this)">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zM14 3.5L18.5 8H14V3.5z"/></svg>
+            Boleto C/V
+        </div>
+        <div class="nav-item" onclick="switchView('view-nota-pedido', this)">
+            <svg viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            Nota de Pedido
+        </div>
+    </nav>
+
+    <main class="main">
+        <section id="view-autos" class="view active">
+            <h1>Gestión de Inventario</h1>
+            <div class="card">
+                <input type="hidden" id="v-index" value="-1">
+                <div class="grid">
+                    <div class="input-group half"><label>Marca</label><input type="text" id="v-marca"></div>
+                    <div class="input-group half"><label>Modelo</label><input type="text" id="v-modelo"></div>
+                    <div class="input-group"><label>Dominio</label><input type="text" id="v-dominio"></div>
+                    <div class="input-group"><label>Año</label><input type="number" id="v-anio"></div>
+                    <div class="input-group"><label>Nº Chasis</label><input type="text" id="v-vin"></div>
+                    <div class="input-group"><label>Nº Motor</label><input type="text" id="v-motor"></div>
+                    <div class="input-group half"><label>Precio de Venta ($)</label><input type="number" id="v-precio"></div>
+                    <button onclick="saveAuto()" id="btn-save-auto" class="btn half" style="align-self: flex-end;">Registrar Unidad</button>
+                </div>
+            </div>
+            <table id="tabla-autos"><tbody></tbody></table>
+        </section>
+
+        <section id="view-clientes" class="view">
+            <h1>Base de Clientes</h1>
+            <div class="card">
+                <input type="hidden" id="c-index" value="-1">
+                <div class="grid">
+                    <div class="input-group half"><label>Nombre y Apellido</label><input type="text" id="c-nombre"></div>
+                    <div class="input-group half"><label>DNI / CUIT</label><input type="text" id="c-dni"></div>
+                    <div class="input-group"><label>Fecha Nacimiento</label><input type="date" id="c-nac"></div>
+                    <div class="input-group"><label>Estado Civil</label><input type="text" id="c-civil"></div>
+                    <div class="input-group"><label>Teléfono</label><input type="text" id="c-tel"></div>
+                    <div class="input-group"><label>Email</label><input type="email" id="c-email"></div>
+                    <div class="input-group half"><label>Ocupación</label><input type="text" id="c-ocupacion"></div>
+                    <div class="input-group half"><label>Domicilio Legal</label><input type="text" id="c-domicilio"></div>
+                    <button onclick="saveCliente()" id="btn-save-cliente" class="btn full">Dar de Alta Cliente</button>
+                </div>
+            </div>
+            <table id="tabla-clientes"><tbody></tbody></table>
+        </section>
+
+        <section id="view-contratos" class="view">
+            <h1>Generar Boleto Compra-Venta</h1>
+            <div class="card">
+                <div class="grid">
+                    <div class="input-group half"><label>Seleccionar Unidad</label><select id="sel-auto-cv"></select></div>
+                    <div class="input-group half"><label>Seleccionar Comprador</label><select id="sel-cliente-cv"></select></div>
+                    <div class="input-group full"><label>Detalle de Pago / Permutas / Cheques</label><textarea id="obs-pago-cv" rows="4" placeholder="Describa vehículos recibidos, numeración de cheques y plazos..."></textarea></div>
+                    <button onclick="generateLegalPDF('cv')" class="btn full" style="background:var(--accent)">IMPRIMIR BOLETO LEGAL</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-nota-pedido" class="view">
+            <h1>Nota de Pedido Profesional</h1>
+            <div class="card">
+                <div class="grid">
+                    <div class="input-group half"><label>Unidad Solicitada</label><select id="sel-auto-np"></select></div>
+                    <div class="input-group half"><label>Cliente / Proponente</label><select id="sel-cliente-np"></select></div>
+                    
+                    <div class="section-divider">Unidad que Posee (Permuta)</div>
+                    <div class="input-group"><label>Marca/Modelo</label><input type="text" id="np-p-marca"></div>
+                    <div class="input-group"><label>Dominio</label><input type="text" id="np-p-dominio"></div>
+                    <div class="input-group"><label>Año</label><input type="number" id="np-p-anio"></div>
+                    <div class="input-group"><label>Valor Toma ($)</label><input type="number" id="np-p-valor" value="0"></div>
+
+                    <div class="section-divider">Liquidación de Otros Gastos</div>
+                    <div class="input-group"><label>Inscripción</label><input type="number" id="np-g-insc" value="0"></div>
+                    <div class="input-group"><label>Transferencia</label><input type="number" id="np-g-trans" value="0"></div>
+                    <div class="input-group"><label>Otorgamiento</label><input type="number" id="np-g-otor" value="0"></div>
+                    <div class="input-group"><label>Flete y Formularios</label><input type="number" id="np-g-flete" value="0"></div>
+                    
+                    <div class="section-divider">Estructura Financiera</div>
+                    <div class="input-group"><label>Reserva / Garantía</label><input type="number" id="np-f-reserva" value="0"></div>
+                    <div class="input-group"><label>Contado c/ Factura</label><input type="number" id="np-f-contado" value="0"></div>
+                    <div class="input-group"><label>Suma a Financiar</label><input type="number" id="np-f-monto" value="0"></div>
+                    <div class="input-group"><label>Cant. Cuotas</label><input type="number" id="np-f-cuotas" value="0"></div>
+                    <div class="input-group"><label>Importe Cuota (Pura)</label><input type="number" id="np-f-valor-c" value="0"></div>
+                    <div class="input-group"><label>Vendedor Interviniente</label><input type="text" id="np-f-vendedor" placeholder="Nombre Asesor"></div>
+
+                    <button onclick="generateLegalPDF('np')" class="btn full" style="background:var(--accent); margin-top:10px;">GENERAR NOTA DE PEDIDO FINAL</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function switchView(id, el) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            el.classList.add('active');
+            updateSelects();
+        }
+
+        let autos = JSON.parse(localStorage.getItem('cem_a')) || [];
+        let clientes = JSON.parse(localStorage.getItem('cem_c')) || [];
+
+        function saveAuto() {
+            const index = document.getElementById('v-index').value;
+            const d = { 
+                marca: document.getElementById('v-marca').value, 
+                modelo: document.getElementById('v-modelo').value, 
+                dominio: document.getElementById('v-dominio').value, 
+                anio: document.getElementById('v-anio').value, 
+                vin: document.getElementById('v-vin').value, 
+                motor: document.getElementById('v-motor').value, 
+                precio: document.getElementById('v-precio').value 
+            };
+            if (index === "-1") autos.push(d); else autos[index] = d;
+            document.getElementById('v-index').value = "-1";
+            document.getElementById('btn-save-auto').innerText = "Registrar Unidad";
+            localStorage.setItem('cem_a', JSON.stringify(autos));
+            clearInputs('view-autos');
+            render();
+        }
+
+        function editAuto(i) {
+            const a = autos[i];
+            document.getElementById('v-marca').value = a.marca;
+            document.getElementById('v-modelo').value = a.modelo;
+            document.getElementById('v-dominio').value = a.dominio;
+            document.getElementById('v-anio').value = a.anio;
+            document.getElementById('v-vin').value = a.vin;
+            document.getElementById('v-motor').value = a.motor;
+            document.getElementById('v-precio').value = a.precio;
+            document.getElementById('v-index').value = i;
+            document.getElementById('btn-save-auto').innerText = "Actualizar Unidad";
+            window.scrollTo(0,0);
+        }
+
+        function deleteAuto(i) {
+            if(confirm('¿Eliminar unidad?')) { autos.splice(i, 1); localStorage.setItem('cem_a', JSON.stringify(autos)); render(); }
+        }
+
+        function saveCliente() {
+            const index = document.getElementById('c-index').value;
+            const d = { 
+                nombre: document.getElementById('c-nombre').value, 
+                dni: document.getElementById('c-dni').value, 
+                nac: document.getElementById('c-nac').value, 
+                civil: document.getElementById('c-civil').value, 
+                tel: document.getElementById('c-tel').value, 
+                email: document.getElementById('c-email').value, 
+                ocupacion: document.getElementById('c-ocupacion').value, 
+                domicilio: document.getElementById('c-domicilio').value 
+            };
+            if (index === "-1") clientes.push(d); else clientes[index] = d;
+            document.getElementById('c-index').value = "-1";
+            document.getElementById('btn-save-cliente').innerText = "Dar de Alta Cliente";
+            localStorage.setItem('cem_c', JSON.stringify(clientes));
+            clearInputs('view-clientes');
+            render();
+        }
+
+        function editCliente(i) {
+            const c = clientes[i];
+            document.getElementById('c-nombre').value = c.nombre;
+            document.getElementById('c-dni').value = c.dni;
+            document.getElementById('c-nac').value = c.nac;
+            document.getElementById('c-civil').value = c.civil;
+            document.getElementById('c-tel').value = c.tel;
+            document.getElementById('c-email').value = c.email;
+            document.getElementById('c-ocupacion').value = c.ocupacion;
+            document.getElementById('c-domicilio').value = c.domicilio;
+            document.getElementById('c-index').value = i;
+            document.getElementById('btn-save-cliente').innerText = "Actualizar Cliente";
+            window.scrollTo(0,0);
+        }
+
+        function deleteCliente(i) {
+            if(confirm('¿Eliminar cliente?')) { clientes.splice(i, 1); localStorage.setItem('cem_c', JSON.stringify(clientes)); render(); }
+        }
+
+        function clearInputs(viewId) {
+            document.querySelectorAll(`#${viewId} input`).forEach(inp => { if(inp.type !== 'hidden') inp.value = ''; });
+        }
+
+        function render() {
+            document.querySelector('#tabla-autos tbody').innerHTML = autos.map((a, i) => `
+                <tr>
+                    <td><b>${a.marca} ${a.modelo} (${a.anio})</b></td>
+                    <td>${a.dominio}</td>
+                    <td>$${Number(a.precio).toLocaleString()}</td>
+                    <td>
+                        <button class="btn-edit" onclick="editAuto(${i})">Editar</button>
+                        <button class="btn-del" onclick="deleteAuto(${i})">Borrar</button>
+                    </td>
+                </tr>`).join('');
+            document.querySelector('#tabla-clientes tbody').innerHTML = clientes.map((c, i) => `
+                <tr>
+                    <td><b>${c.nombre}</b></td>
+                    <td>${c.dni}</td>
+                    <td>${c.tel || 'S/D'}</td>
+                    <td>
+                        <button class="btn-edit" onclick="editCliente(${i})">Editar</button>
+                        <button class="btn-del" onclick="deleteCliente(${i})">Borrar</button>
+                    </td>
+                </tr>`).join('');
+            updateSelects();
+        }
+
+        function updateSelects() {
+            const optA = autos.map((a,i) => `<option value="${i}">${a.marca} ${a.modelo} - ${a.dominio}</option>`).join('');
+            const optC = clientes.map((c,i) => `<option value="${i}">${c.nombre} (${c.dni})</option>`).join('');
+            ['cv', 'np'].forEach(t => {
+                const sA = document.getElementById(`sel-auto-${t}`);
+                const sC = document.getElementById(`sel-cliente-${t}`);
+                if(sA) sA.innerHTML = optA;
+                if(sC) sC.innerHTML = optC;
+            });
+        }
+
+        function generateLegalPDF(type) {
+            const a = autos[document.getElementById(`sel-auto-${type}`).value];
+            const c = clientes[document.getElementById(`sel-cliente-${type}`).value];
+            if(!a || !c) return alert('Seleccione unidad y cliente');
+
+            const win = window.open('', '_blank');
+            let body = "";
+
+            if(type === 'cv') {
+                const obs = document.getElementById('obs-pago-cv').value;
+                body = `
+                    <div class="contract-title">Boleto de Compraventa de Automotor</div>
+                    <p class="clauses">Entre <b>CEMZA AUTOMOTORES</b> con domicilio en Cacique quinza 25 de Embalse, Córdoba, en adelante denominado "EL VENDEDOR", y <b>${c.nombre.toUpperCase()}</b> DNI Nº ${c.dni} con domicilio en ${c.domicilio}, en adelante denominado "EL COMPRADOR", se conviene lo siguiente:</p>
+                    
+                    <div class="section-title">PRIMERA: Objeto</div>
+                    <p class="clauses">El Vendedor vende al Comprador y este acepta la unidad usada que se detalla a continuación:</p>
+                    <div class="data-grid">
+                        <div class="data-item"><span>Marca/Modelo</span><p>${a.marca} ${a.modelo}</p></div>
+                        <div class="data-item"><span>Dominio</span><p>${a.dominio}</p></div>
+                        <div class="data-item"><span>Año</span><p>${a.anio}</p></div>
+                        <div class="data-item"><span>Chasis/Motor</span><p>${a.vin} / ${a.motor}</p></div>
+                    </div>
+
+                    <div class="section-title">SEGUNDA: Precio y Forma de Pago</div>
+                    <p class="clauses">El precio total de la venta se establece en la suma de:</p>
+                    <div class="pago-box">
+                        <p style="font-size:18px; font-weight:800">$${Number(a.precio).toLocaleString()}</p>
+                        <div style="margin-top:10px; border-top:1px solid rgba(255,255,255,0.2); padding-top:10px; font-size:11px">${obs || 'Pagaderos de contado efectivo en este acto.'}</div>
+                    </div>
+
+                    <div class="section-title">TERCERA: Estado de la Unidad</div>
+                    <p class="clauses">El Comprador declara conocer y aceptar el estado de la unidad en que se encuentra, habiéndola revisado a su entera satisfacción, renunciando a reclamar vicios redhibitorios o defectos de funcionamiento posteriores a la entrega.</p>
+
+                    <div class="section-title">CUARTA: Documentación y Transferencia</div>
+                    <p class="clauses">El Vendedor entrega en este acto la documentación necesaria para la transferencia. El Comprador se obliga a realizar la transferencia de dominio ante el Registro Seccional correspondiente en un plazo no mayor a 10 días hábiles, bajo apercibimiento de solicitar la prohibición de circular.</p>
+
+                    <div class="section-title">QUINTA: Responsabilidades</div>
+                    <p class="clauses">A partir de este momento, el Comprador asume la guarda jurídica de la unidad y todas las responsabilidades civiles y penales derivadas del uso de la misma, como así también el pago de patentes e infracciones de tránsito que se devenguen. El Vendedor responde por deudas o multas anteriores a esta fecha.</p>
+
+                    <div class="section-title">SEXTA: Jurisdicción</div>
+                    <p class="clauses">Para todos los efectos legales, las partes se someten a la jurisdicción de los Tribunales Ordinarios de la Provincia de Córdoba, renunciando a cualquier otro fuero o jurisdicción.</p>
+                `;
+            } else {
+                // (Mantiene la lógica de Nota de Pedido que ya funcionaba)
+                const gastos = {
+                    insc: Number(document.getElementById('np-g-insc').value),
+                    trans: Number(document.getElementById('np-g-trans').value),
+                    otor: Number(document.getElementById('np-g-otor').value),
+                    flete: Number(document.getElementById('np-g-flete').value)
+                };
+                const totalG = Object.values(gastos).reduce((s,v)=>s+v,0);
+                const fin = {
+                    res: Number(document.getElementById('np-f-reserva').value),
+                    monto: Number(document.getElementById('np-f-monto').value),
+                    cuotas: document.getElementById('np-f-cuotas').value,
+                    valorC: document.getElementById('np-f-valor-c').value,
+                    vend: document.getElementById('np-f-vendedor').value
+                };
+                const permutaVal = Number(document.getElementById('np-p-valor').value);
+
+                body = `
+                    <div class="contract-title">Nota de Pedido de Unidad</div>
+                    <div class="section-title">Datos del Proponente</div>
+                    <div class="data-grid">
+                        <div class="data-item"><span>Nombre</span><p>${c.nombre.toUpperCase()}</p></div>
+                        <div class="data-item"><span>DNI/CUIT</span><p>${c.dni}</p></div>
+                        <div class="data-item"><span>Domicilio</span><p>${c.domicilio}</p></div>
+                    </div>
+                    <div class="section-title">Detalle de Operación</div>
+                    <div class="data-grid">
+                        <div class="data-item"><span>Unidad Solicitada</span><p>${a.marca} ${a.modelo} (${a.anio})</p></div>
+                        <div class="data-item"><span>Precio Venta</span><p>$${Number(a.precio).toLocaleString()}</p></div>
+                        <div class="data-item"><span>Toma de Permuta</span><p>$${permutaVal.toLocaleString()}</p></div>
+                        <div class="data-item"><span>Diferencia</span><p>$${(a.precio - permutaVal).toLocaleString()}</p></div>
+                    </div>
+                    <div class="section-title">Gastos y Sellados</div>
+                    <table class="np-table">
+                        <tr><td>Inscripción y Transferencia</td><td align="right">$${(gastos.insc + gastos.trans).toLocaleString()}</td></tr>
+                        <tr><td>Flete y Gestoría</td><td align="right">$${(gastos.flete + gastos.otor).toLocaleString()}</td></tr>
+                        <tr style="font-weight:800; background:#0f172a; color:#fff"><td>TOTAL GASTOS</td><td align="right">$${totalG.toLocaleString()}</td></tr>
+                    </table>
+                `;
+            }
+
+            win.document.write(`
+                <html>
+                <head>
+                    <style>
+                        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
+                        body { font-family: 'Plus Jakarta Sans', sans-serif; padding: 40px; color: #1e293b; line-height:1.4 }
+                        .header { display: flex; justify-content: space-between; border-bottom: 2px solid #0f172a; padding-bottom: 15px; margin-bottom: 25px; }
+                        .contract-title { text-align: center; font-size: 14px; font-weight: 800; text-transform: uppercase; margin: 20px 0; background: #0f172a; color: #fff; padding: 8px; border-radius: 4px; }
+                        .section-title { font-size: 9px; font-weight: 800; color: #2563eb; text-transform: uppercase; margin: 15px 0 5px 0; border-left: 3px solid #2563eb; padding-left: 8px; }
+                        .data-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; background: #f8fafc; padding: 12px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #e2e8f0; }
+                        .data-item span { display: block; font-size: 7.5px; color: #64748b; font-weight: 700; text-transform: uppercase; }
+                        .data-item p { margin: 0; font-size: 10px; font-weight: 600; color: #0f172a; }
+                        .pago-box { background: #0f172a; color: #fff; padding: 15px; border-radius: 10px; margin: 10px 0; }
+                        .clauses { font-size: 10px; text-align: justify; margin-bottom: 10px; color: #334155; }
+                        .np-table { width: 100%; border-collapse: collapse; font-size: 10px; }
+                        .np-table td { padding: 8px; border-bottom: 1px solid #e2e8f0; }
+                        .signatures { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-top: 50px; }
+                        .sig-line { border-top: 1px solid #cbd5e1; padding-top: 8px; text-align: center; font-size: 9px; font-weight: 800; }
+                        @media print { .no-print { display: none; } }
+                    </style>
+                </head>
+                <body>
+                    <button class="no-print" onclick="window.print()" style="margin-bottom:20px; padding:10px 20px; background:#2563eb; color:white; border:none; border-radius:5px; cursor:pointer; font-weight:800">IMPRIMIR</button>
+                    <div class="header">
+                        <div style="font-size:24px; font-weight:800">CEMZA <span style="color:#2563eb">AUTOMOTORES</span></div>
+                        <div style="text-align:right; font-size:10px">Embalse, Córdoba<br>${new Date().toLocaleDateString()}</div>
+                    </div>
+                    ${body}
+                    <div class="signatures">
+                        <div class="sig-line">FIRMA COMPRADOR</div>
+                        <div class="sig-line">AUTORIZACIÓN CEMZA</div>
+                    </div>
+                </body>
+                </html>
+            `);
+            win.document.close();
+        }
+
+        render();
+        updateSelects();
+    </script>
+</body>
+</html>
