@@ -19,7 +19,6 @@
         .nav-item { padding: 14px 18px; border-radius: 12px; margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: 0.3s; color: #94a3b8; }
         .nav-item:hover { background: rgba(255,255,255,0.05); color: white; }
         .nav-item.active { background: var(--accent); color: white; }
-        .nav-item svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
 
         /* MAIN */
         .main { margin-left: 260px; flex: 1; padding: 40px; }
@@ -65,13 +64,12 @@
         <section id="view-autos" class="view active">
             <h1>Inventario</h1>
             <div class="card">
-                <input type="hidden" id="v-index" value="-1">
                 <div class="grid">
                     <div class="input-group half"><label>Marca</label><input type="text" id="v-marca"></div>
                     <div class="input-group half"><label>Modelo</label><input type="text" id="v-modelo"></div>
                     <div class="input-group"><label>Dominio</label><input type="text" id="v-dominio"></div>
                     <div class="input-group"><label>Año</label><input type="number" id="v-anio"></div>
-                    <div class="input-group half"><label>Precio de Venta ($)</label><input type="number" id="v-precio"></div>
+                    <div class="input-group half"><label>Precio Venta ($)</label><input type="number" id="v-precio"></div>
                     <button onclick="saveAuto()" class="btn half" style="align-self: flex-end;">Guardar Unidad</button>
                 </div>
             </div>
@@ -81,7 +79,6 @@
         <section id="view-clientes" class="view">
             <h1>Clientes</h1>
             <div class="card">
-                <input type="hidden" id="c-index" value="-1">
                 <div class="grid">
                     <div class="input-group half"><label>Nombre y Apellido</label><input type="text" id="c-nombre"></div>
                     <div class="input-group half"><label>DNI / CUIT</label><input type="text" id="c-dni"></div>
@@ -92,8 +89,23 @@
             <table id="tabla-clientes"><tbody></tbody></table>
         </section>
 
+        <section id="view-contratos" class="view">
+            <h1>Boleto Compra-Venta</h1>
+            <div class="card">
+                <div class="grid">
+                    <div class="input-group half"><label>Seleccionar Unidad</label><select id="sel-auto-cv"></select></div>
+                    <div class="input-group half"><label>Seleccionar Comprador</label><select id="sel-cliente-cv"></select></div>
+                    <div class="input-group full">
+                        <label>Detalle de la Operación (Pago, Permutas, Cheques)</label>
+                        <textarea id="obs-pago-cv" rows="5" placeholder="Ej: Se recibe $2.000.000 en efectivo y el resto en 3 cheques de..."></textarea>
+                    </div>
+                    <button onclick="generateLegalPDF('cv')" class="btn full" style="background:var(--accent)">GENERAR BOLETO LEGAL C/V</button>
+                </div>
+            </div>
+        </section>
+
         <section id="view-nota-pedido" class="view">
-            <h1>Nota de Pedido Profesional</h1>
+            <h1>Nota de Pedido</h1>
             <div class="card">
                 <div class="grid">
                     <div class="input-group half"><label>Unidad Solicitada</label><select id="sel-auto-np"></select></div>
@@ -105,28 +117,19 @@
                     <div class="input-group"><label>Año</label><input type="number" id="np-p-anio"></div>
                     <div class="input-group half"><label>Valor Toma ($)</label><input type="number" id="np-p-valor" value="0"></div>
 
-                    <div class="section-divider">Liquidación de Gastos</div>
-                    <div class="input-group"><label>Inscripción ($)</label><input type="number" id="np-g-insc" value="0"></div>
-                    <div class="input-group"><label>Transferencia ($)</label><input type="number" id="np-g-trans" value="0"></div>
-                    <div class="input-group"><label>Otorgamiento ($)</label><input type="number" id="np-g-otor" value="0"></div>
-                    <div class="input-group"><label>Flete y Formularios ($)</label><input type="number" id="np-g-flete" value="0"></div>
-                    
-                    <div class="section-divider">Estructura Financiera</div>
-                    <div class="input-group"><label>Reserva / Garantía ($)</label><input type="number" id="np-f-reserva" value="0"></div>
-                    <div class="input-group"><label>Contado c/ Factura ($)</label><input type="number" id="np-f-contado" value="0"></div>
-                    <div class="input-group"><label>Suma a Financiar ($)</label><input type="number" id="np-f-monto" value="0"></div>
-                    <div class="input-group"><label>Cant. Cuotas</label><input type="number" id="np-f-cuotas" value="0"></div>
-                    <div class="input-group"><label>Importe Cuota ($)</label><input type="number" id="np-f-valor-c" value="0"></div>
-                    <div class="input-group"><label>Vendedor</label><input type="text" id="np-f-vendedor"></div>
+                    <div class="section-divider">Gastos y Financiación</div>
+                    <div class="input-group"><label>Gastos Totales ($)</label><input type="number" id="np-g-total" value="0"></div>
+                    <div class="input-group"><label>Reserva ($)</label><input type="number" id="np-f-reserva" value="0"></div>
+                    <div class="input-group"><label>Monto a Financiar ($)</label><input type="number" id="np-f-monto" value="0"></div>
+                    <div class="input-group"><label>Cuotas / Valor</label><input type="text" id="np-f-cuotas" placeholder="12 de $50.000"></div>
 
-                    <button onclick="generateLegalPDF('np')" class="btn full" style="background:var(--accent); margin-top:10px;">GENERAR NOTA DE PEDIDO FINAL</button>
+                    <button onclick="generateLegalPDF('np')" class="btn full" style="background:var(--accent); margin-top:10px;">GENERAR NOTA DE PEDIDO</button>
                 </div>
             </div>
         </section>
     </main>
 
     <script>
-        // LÓGICA DE DATOS
         let autos = JSON.parse(localStorage.getItem('cem_a')) || [];
         let clientes = JSON.parse(localStorage.getItem('cem_c')) || [];
 
@@ -150,127 +153,101 @@
 
         function render() {
             updateSelects();
-            document.querySelector('#tabla-autos tbody').innerHTML = autos.map(a => `<tr><td>${a.marca} ${a.modelo}</td><td>${a.dominio}</td><td>$${Number(a.precio).toLocaleString()}</td><td></td></tr>`).join('');
-            document.querySelector('#tabla-clientes tbody').innerHTML = clientes.map(c => `<tr><td>${c.nombre}</td><td>${c.dni}</td><td></td><td></td></tr>`).join('');
+            document.querySelector('#tabla-autos tbody').innerHTML = autos.map(a => `<tr><td><b>${a.marca} ${a.modelo}</b></td><td>${a.dominio}</td><td>$${Number(a.precio).toLocaleString()}</td><td></td></tr>`).join('');
+            document.querySelector('#tabla-clientes tbody').innerHTML = clientes.map(c => `<tr><td><b>${c.nombre}</b></td><td>${c.dni}</td><td></td><td></td></tr>`).join('');
         }
 
         function updateSelects() {
-            const optA = autos.map((a,i) => `<option value="${i}">${a.marca} ${a.modelo}</option>`).join('');
+            const optA = autos.map((a,i) => `<option value="${i}">${a.marca} ${a.modelo} (${a.dominio})</option>`).join('');
             const optC = clientes.map((c,i) => `<option value="${i}">${c.nombre}</option>`).join('');
-            document.getElementById('sel-auto-np').innerHTML = optA;
-            document.getElementById('sel-cliente-np').innerHTML = optC;
+            ['cv', 'np'].forEach(type => {
+                document.getElementById(`sel-auto-${type}`).innerHTML = optA;
+                document.getElementById(`sel-cliente-${type}`).innerHTML = optC;
+            });
         }
 
-        // GENERACIÓN DEL PDF CON DATOS COMPLETOS
         function generateLegalPDF(type) {
-            const a = autos[document.getElementById('sel-auto-np').value];
-            const c = clientes[document.getElementById('sel-cliente-np').value];
-
-            // Captura de todos los campos extra de la pestaña
-            const permuta = {
-                desc: document.getElementById('np-p-marca').value,
-                dom: document.getElementById('np-p-dominio').value,
-                anio: document.getElementById('np-p-anio').value,
-                valor: Number(document.getElementById('np-p-valor').value)
-            };
-
-            const gastos = {
-                insc: Number(document.getElementById('np-g-insc').value),
-                trans: Number(document.getElementById('np-g-trans').value),
-                otor: Number(document.getElementById('np-g-otor').value),
-                flete: Number(document.getElementById('np-g-flete').value)
-            };
-            const totalG = Object.values(gastos).reduce((s,v)=>s+v,0);
-
-            const fin = {
-                reserva: Number(document.getElementById('np-f-reserva').value),
-                contado: Number(document.getElementById('np-f-contado').value),
-                monto: Number(document.getElementById('np-f-monto').value),
-                cuotas: document.getElementById('np-f-cuotas').value,
-                valorC: document.getElementById('np-f-valor-c').value,
-                vendedor: document.getElementById('np-f-vendedor').value
-            };
+            const a = autos[document.getElementById(`sel-auto-${type}`).value];
+            const c = clientes[document.getElementById(`sel-cliente-${type}`).value];
+            if(!a || !c) return alert("Seleccione vehículo y cliente");
 
             const win = window.open('', '_blank');
-            win.document.write(`
-                <html>
-                <head>
-                    <style>
-                        body { font-family: 'Plus Jakarta Sans', sans-serif; padding: 40px; color: #1e293b; font-size: 11px; line-height: 1.4; }
-                        .header { display: flex; justify-content: space-between; border-bottom: 3px solid #0f172a; padding-bottom: 10px; margin-bottom: 20px; }
-                        .title { text-align: center; font-weight: 800; text-transform: uppercase; background: #0f172a; color: white; padding: 8px; margin: 15px 0; border-radius: 4px; }
-                        .section { font-weight: 800; color: #2563eb; text-transform: uppercase; margin-top: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 3px; font-size: 9px; }
-                        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
-                        .box { background: #f8fafc; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; }
-                        .box label { display: block; font-size: 8px; color: #64748b; font-weight: 700; text-transform: uppercase; }
-                        .box p { margin: 0; font-weight: 600; font-size: 11px; }
-                        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
-                        table td { padding: 6px; border-bottom: 1px solid #e2e8f0; }
-                        .clausulas { font-size: 8.5px; text-align: justify; color: #475569; margin-top: 15px; }
-                        .firmas { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: 50px; text-align: center; }
-                        .linea { border-top: 1px solid #cbd5e1; padding-top: 5px; font-weight: 800; font-size: 9px; }
-                    </style>
-                </head>
-                <body>
-                    <div class="header">
-                        <div style="font-size:22px; font-weight:800">CEMZA <span style="color:#2563eb">AUTOMOTORES</span></div>
-                        <div style="text-align:right">Fecha: ${new Date().toLocaleDateString()}</div>
-                    </div>
-                    <div class="title">Nota de Pedido de Unidad - Propuesta Comercial</div>
+            let bodyContent = "";
+
+            if (type === 'cv') {
+                // BOLETO COMPRA VENTA COMPLETO
+                const detallePago = document.getElementById('obs-pago-cv').value;
+                bodyContent = `
+                    <div class="title">Boleto de Compra-Venta Automotor</div>
+                    <p>Entre <b>CEMZA AUTOMOTORES</b> en adelante "EL VENDEDOR", y <b>${c.nombre.toUpperCase()}</b>, DNI <b>${c.dni}</b>, con domicilio en <b>${c.domicilio}</b>, en adelante "EL COMPRADOR", se conviene lo siguiente:</p>
                     
-                    <div class="section">Datos del Proponente</div>
+                    <div class="section">Primera: Objeto</div>
+                    <p>El Vendedor vende al Comprador una unidad usada Marca <b>${a.marca}</b>, Modelo <b>${a.modelo}</b>, Año <b>${a.anio}</b>, Dominio <b>${a.dominio}</b>.</p>
+
+                    <div class="section">Segunda: Precio y Forma de Pago</div>
+                    <p>La presente operación se realiza por un precio total de <b>$${Number(a.precio).toLocaleString()}</b>. El pago se efectúa de la siguiente manera: ${detallePago || 'Según acuerdo de partes'}.</p>
+
+                    <div class="section">Tercera: Estado de la Unidad</div>
+                    <p>El comprador declara conocer el estado mecánico, de carrocería y conservación de la unidad, la cual se entrega libre de deudas de patentes e infracciones hasta el día de la fecha.</p>
+
+                    <div class="section">Cuarta: Transferencia</div>
+                    <p>El comprador se obliga a realizar la transferencia de dominio ante el registro correspondiente en un plazo no mayor a 10 días hábiles, siendo los gastos de la misma a su exclusivo cargo.</p>
+                `;
+            } else {
+                // NOTA DE PEDIDO (EL DISEÑO QUE TE GUSTÓ)
+                const p_val = Number(document.getElementById('np-p-valor').value);
+                const g_total = Number(document.getElementById('np-g-total').value);
+                const fin = {
+                    reserva: Number(document.getElementById('np-f-reserva').value),
+                    monto: Number(document.getElementById('np-f-monto').value),
+                    cuotas: document.getElementById('np-f-cuotas').value
+                };
+
+                bodyContent = `
+                    <div class="title">Nota de Pedido de Unidad</div>
+                    <div class="section">Proponente</div>
+                    <div class="grid"><div class="box"><label>Nombre</label><p>${c.nombre.toUpperCase()}</p></div><div class="box"><label>DNI</label><p>${c.dni}</p></div></div>
+                    <div class="section">Unidad Solicitada</div>
                     <div class="grid">
-                        <div class="box"><label>Nombre</label><p>${c.nombre.toUpperCase()}</p></div>
-                        <div class="box"><label>DNI/CUIT</label><p>${c.dni}</p></div>
-                        <div class="box" style="grid-column: span 2;"><label>Domicilio Legal</label><p>${c.domicilio}</p></div>
+                        <div class="box"><label>Vehículo</label><p>${a.marca} ${a.modelo}</p></div>
+                        <div class="box"><label>Precio + Gastos</label><p>$${(Number(a.precio) + g_total).toLocaleString()}</p></div>
                     </div>
-
-                    <div class="section">Detalle de Operación</div>
+                    ${p_val > 0 ? `<div class="section">Permuta</div><div class="box"><p>${document.getElementById('np-p-marca').value} - $${p_val.toLocaleString()}</p></div>` : ''}
+                    <div class="section">Estructura Financiera</div>
                     <div class="grid">
-                        <div class="box"><label>Unidad Solicitada</label><p>${a.marca} ${a.modelo} (${a.anio})</p></div>
-                        <div class="box"><label>Precio Venta</label><p>$${Number(a.precio).toLocaleString()}</p></div>
+                        <div class="box"><label>Reserva</label><p>$${fin.reserva.toLocaleString()}</p></div>
+                        <div class="box"><label>Plan</label><p>${fin.cuotas}</p></div>
                     </div>
+                `;
+            }
 
-                    ${permuta.valor > 0 ? `
-                    <div class="section">Unidad que Posee (Permuta)</div>
-                    <div class="grid">
-                        <div class="box"><label>Marca/Modelo</label><p>${permuta.desc}</p></div>
-                        <div class="box"><label>Dominio / Año</label><p>${permuta.dom} - ${permuta.anio}</p></div>
-                        <div class="box"><label>Valor de Toma</label><p>$${permuta.valor.toLocaleString()}</p></div>
-                    </div>` : ''}
-
-                    <div class="section">Liquidación de Gastos</div>
-                    <table>
-                        <tr><td>Gastos de Inscripción y Transferencia</td><td align="right">$${(gastos.insc + gastos.trans).toLocaleString()}</td></tr>
-                        <tr><td>Otorgamiento, Flete y Formularios</td><td align="right">$${(gastos.otor + gastos.flete).toLocaleString()}</td></tr>
-                        <tr style="font-weight:800; background:#f1f5f9"><td>TOTAL GASTOS A PAGAR</td><td align="right">$${totalG.toLocaleString()}</td></tr>
-                    </table>
-
-                    <div class="section">Forma de Pago y Financiación</div>
-                    <div class="grid">
-                        <div class="box"><label>Reserva / Seña</label><p>$${fin.reserva.toLocaleString()}</p></div>
-                        <div class="box"><label>Pago Contado</label><p>$${fin.contado.toLocaleString()}</p></div>
-                        <div class="box" style="background:#eef2ff"><label>Saldo a Financiar</label><p>$${fin.monto.toLocaleString()}</p></div>
-                        <div class="box" style="background:#eef2ff"><label>Plan de Pago</label><p>${fin.cuotas} cuotas de $${Number(fin.valorC).toLocaleString()}</p></div>
+            win.document.write(`
+                <html><head><style>
+                    body { font-family: 'Plus Jakarta Sans', sans-serif; padding: 40px; font-size: 11px; color: #1e293b; }
+                    .header { display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 10px; }
+                    .title { text-align: center; font-weight: 800; text-transform: uppercase; background: #0f172a; color: white; padding: 8px; margin: 20px 0; }
+                    .section { font-weight: 800; color: #2563eb; text-transform: uppercase; margin-top: 15px; border-bottom: 1px solid #e2e8f0; }
+                    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
+                    .box { background: #f8fafc; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; }
+                    .box label { display: block; font-size: 8px; color: #64748b; }
+                    .box p { margin: 0; font-weight: 600; }
+                    .firmas { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: 60px; text-align: center; }
+                    .linea { border-top: 1px solid #000; padding-top: 5px; font-weight: 800; }
+                </style></head><body>
+                    <div class="header">
+                        <div style="font-size:20px; font-weight:800">CEMZA AUTOMOTORES</div>
+                        <div>Fecha: ${new Date().toLocaleDateString()}</div>
                     </div>
-
-                    <div class="clausulas">
-                        <b>CONDICIONES:</b> 1. La presente constituye una oferta de compra sujeta a aprobación. 2. Los gastos de transferencia son a cargo del proponente. 3. La reserva garantiza la prioridad de la unidad por 48hs. 4. El proponente declara conocer y aceptar el estado de la unidad usada exhibida.
-                    </div>
-
-                    <div style="margin-top:20px">Vendedor Interviniente: <b>${fin.vendedor || 'Staff CEMZA'}</b></div>
-
+                    ${bodyContent}
                     <div class="firmas">
-                        <div class="linea">FIRMA DEL PROPONENTE</div>
-                        <div class="linea">AUTORIZACIÓN CEMZA</div>
+                        <div class="linea">VENDEDOR / CEMZA</div>
+                        <div class="linea">COMPRADOR / PROPONENTE</div>
                     </div>
                     <script>window.print();<\/script>
-                </body>
-                </html>
+                </body></html>
             `);
             win.document.close();
         }
-
         render();
     </script>
 </body>
