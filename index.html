@@ -175,11 +175,9 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Variables Globales
         window.autos = [];
         window.clientes = [];
 
-        // --- SINCRONIZACIÓN EN TIEMPO REAL ---
         onSnapshot(collection(db, "autos"), (snapshot) => {
             window.autos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             window.render();
@@ -190,7 +188,6 @@
             window.render();
         });
 
-        // --- FUNCIONES DE BASE DE DATOS (Expuestas a window) ---
         window.saveAuto = async function() {
             const id = document.getElementById('v-index').value;
             const d = { 
@@ -202,13 +199,8 @@
                 motor: document.getElementById('v-motor').value, 
                 precio: document.getElementById('v-precio').value 
             };
-
-            if (id === "-1") {
-                await addDoc(collection(db, "autos"), d);
-            } else {
-                await updateDoc(doc(db, "autos", id), d);
-            }
-            
+            if (id === "-1") await addDoc(collection(db, "autos"), d);
+            else await updateDoc(doc(db, "autos", id), d);
             document.getElementById('v-index').value = "-1";
             document.getElementById('btn-save-auto').innerText = "Registrar Unidad";
             window.clearInputs('view-autos');
@@ -230,13 +222,8 @@
                 ocupacion: document.getElementById('c-ocupacion').value, 
                 domicilio: document.getElementById('c-domicilio').value 
             };
-
-            if (id === "-1") {
-                await addDoc(collection(db, "clientes"), d);
-            } else {
-                await updateDoc(doc(db, "clientes", id), d);
-            }
-
+            if (id === "-1") await addDoc(collection(db, "clientes"), d);
+            else await updateDoc(doc(db, "clientes", id), d);
             document.getElementById('c-index').value = "-1";
             document.getElementById('btn-save-cliente').innerText = "Dar de Alta Cliente";
             window.clearInputs('view-clientes');
@@ -246,7 +233,8 @@
             if(confirm('¿Eliminar cliente?')) await deleteDoc(doc(db, "clientes", id));
         };
 
-        // --- FUNCIONES DE UI Y RENDER (Movidas adentro del modulo para evitar conflictos) ---
+        // --- FUNCIONES UI Y PDF RESTAURADAS AL 100% ---
+
         window.switchView = function(id, el) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -286,12 +274,13 @@
 
         window.clearInputs = function(viewId) {
             document.querySelectorAll(`#${viewId} input`).forEach(inp => { if(inp.type !== 'hidden') inp.value = ''; });
+            if(viewId === 'view-autos') document.getElementById('v-index').value = "-1";
+            if(viewId === 'view-clientes') document.getElementById('c-index').value = "-1";
         };
 
         window.render = function() {
             const tbodyAutos = document.querySelector('#tabla-autos tbody');
             const tbodyClientes = document.querySelector('#tabla-clientes tbody');
-            
             if(tbodyAutos) {
                 tbodyAutos.innerHTML = window.autos.map((a, i) => `
                 <tr>
@@ -304,7 +293,6 @@
                     </td>
                 </tr>`).join('');
             }
-            
             if(tbodyClientes) {
                 tbodyClientes.innerHTML = window.clientes.map((c, i) => `
                 <tr>
@@ -344,6 +332,7 @@
                 bodyContent = `
                     <div class="contract-title">Boleto de Compraventa de Automotor</div>
                     <p class="clauses">Entre <b>CEMZA AUTOMOTORES</b> con domicilio en Cacique quinza 25 de Embalse, Córdoba, en adelante denominado "EL VENDEDOR", y <b>${c.nombre.toUpperCase()}</b> DNI Nº ${c.dni} con domicilio en ${c.domicilio}, en adelante denominado "EL COMPRADOR", se conviene lo siguiente:</p>
+                    
                     <div class="section-title">PRIMERA: Objeto</div>
                     <p class="clauses">El Vendedor vende al Comprador y este acepta la unidad usada que se detalla a continuación:</p>
                     <div class="data-grid">
@@ -352,15 +341,25 @@
                         <div class="data-item"><span>Año</span><p>${a.anio}</p></div>
                         <div class="data-item"><span>Chasis/Motor</span><p>${a.vin} / ${a.motor}</p></div>
                     </div>
+
                     <div class="section-title">SEGUNDA: Precio y Forma de Pago</div>
+                    <p class="clauses">El precio total de la venta se establece en la suma de:</p>
                     <div class="pago-box">
                         <p style="font-size:18px; font-weight:800">$${Number(a.precio).toLocaleString()}</p>
                         <div style="margin-top:10px; border-top:1px solid rgba(255,255,255,0.2); padding-top:10px; font-size:11px">${obs || 'Pagaderos de contado efectivo en este acto.'}</div>
                     </div>
+
                     <div class="section-title">TERCERA: Estado de la Unidad</div>
-                    <p class="clauses">El Comprador declara conocer y aceptar el estado de la unidad en que se encuentra, habiéndola revisado a su entera satisfacción.</p>
+                    <p class="clauses">El Comprador declara conocer y aceptar el estado de la unidad en que se encuentra, habiéndola revisado a su entera satisfacción, renunciando a reclamar vicios redhibitorios o defectos de funcionamiento posteriores a la entrega.</p>
+
                     <div class="section-title">CUARTA: Documentación y Transferencia</div>
-                    <p class="clauses">El Comprador se obliga a realizar la transferencia de dominio en un plazo no mayor a 10 días hábiles.</p>
+                    <p class="clauses">El Vendedor entrega en este acto la documentación necesaria para la transferencia. El Comprador se obliga a realizar la transferencia de dominio ante el Registro Seccional correspondiente en un plazo no mayor a 10 días hábiles, bajo apercibimiento de solicitar la prohibición de circular.</p>
+
+                    <div class="section-title">QUINTA: Responsabilidades</div>
+                    <p class="clauses">A partir de este momento, el Comprador asume la guarda jurídica de la unidad y todas las responsabilidades civiles y penales derivadas del uso de la misma, como así también el pago de patentes e infracciones de tránsito que se devenguen. El Vendedor responde por deudas o multas anteriores a esta fecha.</p>
+
+                    <div class="section-title">SEXTA: Jurisdicción</div>
+                    <p class="clauses">Para todos los efectos legales, las partes se someten a la jurisdicción de los Tribunales Ordinarios de la Provincia de Córdoba, renunciando a cualquier otro fuero o jurisdicción.</p>
                 `;
             } else {
                 const gastos = {
@@ -386,6 +385,7 @@
                     <div class="data-grid">
                         <div class="data-item"><span>Nombre</span><p>${c.nombre.toUpperCase()}</p></div>
                         <div class="data-item"><span>DNI/CUIT</span><p>${c.dni}</p></div>
+                        <div class="data-item"><span>Domicilio</span><p>${c.domicilio}</p></div>
                     </div>
                     <div class="section-title">Detalle de Operación</div>
                     <div class="data-grid">
@@ -397,13 +397,17 @@
                     <div class="section-title">Gastos y Sellados</div>
                     <table class="np-table">
                         <tr><td>Inscripción y Transferencia</td><td align="right">$${(gastos.insc + gastos.trans).toLocaleString()}</td></tr>
+                        <tr><td>Flete, Gestoría y Formularios</td><td align="right">$${(gastos.flete + gastos.otor).toLocaleString()}</td></tr>
                         <tr style="font-weight:800; background:#0f172a; color:#fff"><td>TOTAL GASTOS</td><td align="right">$${totalG.toLocaleString()}</td></tr>
                     </table>
                     <div class="section-title">Estructura de Pago</div>
                     <div class="data-grid">
+                        <div class="data-item"><span>Reserva</span><p>$${fin.res.toLocaleString()}</p></div>
+                        <div class="data-item"><span>Efectivo Contado</span><p>$${fin.contado.toLocaleString()}</p></div>
                         <div class="data-item"><span>Saldo a Financiar</span><p>$${fin.monto.toLocaleString()}</p></div>
                         <div class="data-item"><span>Plan</span><p>${fin.cuotas} cuotas de $${fin.valorC}</p></div>
                     </div>
+                    <p style="font-size:9px; margin-top:15px"><b>Vendedor Interviniente:</b> ${fin.vend || 'S/D'}</p>
                 `;
             }
 
@@ -429,7 +433,7 @@
                     </style>
                 </head>
                 <body>
-                    <button class="no-print" onclick="window.print()" style="margin-bottom:20px; padding:10px 20px; background:#2563eb; color:white; border:none; border-radius:5px; cursor:pointer; font-weight:800">IMPRIMIR</button>
+                    <button class="no-print" onclick="window.print()" style="margin-bottom:20px; padding:10px 20px; background:#2563eb; color:white; border:none; border-radius:5px; cursor:pointer; font-weight:800">IMPRIMIR DOCUMENTO</button>
                     <div class="header">
                         <div style="font-size:24px; font-weight:800">CEMZA <span style="color:#2563eb">AUTOMOTORES</span></div>
                         <div style="text-align:right; font-size:10px">Embalse, Córdoba<br>${new Date().toLocaleDateString()}</div>
