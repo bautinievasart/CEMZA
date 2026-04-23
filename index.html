@@ -44,7 +44,7 @@
         .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
         
         .btn-edit { background: #f1f5f9; color: var(--primary); padding: 6px 12px; font-size: 11px; margin-right: 5px; border-radius: 6px; font-weight: 700; cursor: pointer; border: none; }
-        .btn-del { background: #fee2e2; color: var(--danger); padding: 6px 12px; font-size: 11px; border-radius: 6px; font-weight: 700; cursor: pointer; border: none; }
+        .btn-del { background: #fee2e2; color: var(--danger); padding: 6px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; border: none; }
 
         .section-divider { grid-column: 1/-1; padding: 15px 0 5px 0; border-bottom: 2px solid #f1f5f9; margin-bottom: 10px; font-size: 12px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
 
@@ -159,20 +159,40 @@
         </section>
     </main>
 
-    <script>
-        function switchView(id, el) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            el.classList.add('active');
-            updateSelects();
-        }
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        let autos = JSON.parse(localStorage.getItem('cem_a')) || [];
-        let clientes = JSON.parse(localStorage.getItem('cem_c')) || [];
+        const firebaseConfig = {
+            apiKey: "AIzaSyDCvpjfcF523jCEV7OvJmlkgk7VlLqxgmY",
+            authDomain: "cemza-dms.firebaseapp.com",
+            projectId: "cemza-dms",
+            storageBucket: "cemza-dms.firebasestorage.app",
+            messagingSenderId: "885199998144",
+            appId: "1:885199998144:web:e1246a9b6825c0c3cdf125"
+        };
 
-        function saveAuto() {
-            const index = document.getElementById('v-index').value;
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // --- GLOBAL VARIABLES (Mantenidas para no romper lógica original) ---
+        window.autos = [];
+        window.clientes = [];
+
+        // --- REAL-TIME SYNC ---
+        onSnapshot(collection(db, "autos"), (snapshot) => {
+            window.autos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            render();
+        });
+
+        onSnapshot(collection(db, "clientes"), (snapshot) => {
+            window.clientes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            render();
+        });
+
+        // --- FIREBASE WRAPPERS PARA NO ROMPER ONCLICK ---
+        window.saveAuto = async function() {
+            const id = document.getElementById('v-index').value;
             const d = { 
                 marca: document.getElementById('v-marca').value, 
                 modelo: document.getElementById('v-modelo').value, 
@@ -182,34 +202,26 @@
                 motor: document.getElementById('v-motor').value, 
                 precio: document.getElementById('v-precio').value 
             };
-            if (index === "-1") autos.push(d); else autos[index] = d;
+
+            if (id === "-1") {
+                await addDoc(collection(db, "autos"), d);
+            } else {
+                await updateDoc(doc(db, "autos", id), d);
+            }
+            
             document.getElementById('v-index').value = "-1";
             document.getElementById('btn-save-auto').innerText = "Registrar Unidad";
-            localStorage.setItem('cem_a', JSON.stringify(autos));
             clearInputs('view-autos');
-            render();
         }
 
-        function editAuto(i) {
-            const a = autos[i];
-            document.getElementById('v-marca').value = a.marca;
-            document.getElementById('v-modelo').value = a.modelo;
-            document.getElementById('v-dominio').value = a.dominio;
-            document.getElementById('v-anio').value = a.anio;
-            document.getElementById('v-vin').value = a.vin;
-            document.getElementById('v-motor').value = a.motor;
-            document.getElementById('v-precio').value = a.precio;
-            document.getElementById('v-index').value = i;
-            document.getElementById('btn-save-auto').innerText = "Actualizar Unidad";
-            window.scrollTo(0,0);
+        window.deleteAuto = async function(id) {
+            if(confirm('¿Eliminar unidad?')) {
+                await deleteDoc(doc(db, "autos", id));
+            }
         }
 
-        function deleteAuto(i) {
-            if(confirm('¿Eliminar unidad?')) { autos.splice(i, 1); localStorage.setItem('cem_a', JSON.stringify(autos)); render(); }
-        }
-
-        function saveCliente() {
-            const index = document.getElementById('c-index').value;
+        window.saveCliente = async function() {
+            const id = document.getElementById('c-index').value;
             const d = { 
                 nombre: document.getElementById('c-nombre').value, 
                 dni: document.getElementById('c-dni').value, 
@@ -220,16 +232,51 @@
                 ocupacion: document.getElementById('c-ocupacion').value, 
                 domicilio: document.getElementById('c-domicilio').value 
             };
-            if (index === "-1") clientes.push(d); else clientes[index] = d;
+
+            if (id === "-1") {
+                await addDoc(collection(db, "clientes"), d);
+            } else {
+                await updateDoc(doc(db, "clientes", id), d);
+            }
+
             document.getElementById('c-index').value = "-1";
             document.getElementById('btn-save-cliente').innerText = "Dar de Alta Cliente";
-            localStorage.setItem('cem_c', JSON.stringify(clientes));
             clearInputs('view-clientes');
-            render();
+        }
+
+        window.deleteCliente = async function(id) {
+            if(confirm('¿Eliminar cliente?')) {
+                await deleteDoc(doc(db, "clientes", id));
+            }
+        }
+    </script>
+
+    <script>
+        // Mantenemos las funciones de UI puras aquí
+        function switchView(id, el) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            el.classList.add('active');
+            updateSelects();
+        }
+
+        function editAuto(i) {
+            const a = window.autos[i];
+            document.getElementById('v-marca').value = a.marca;
+            document.getElementById('v-modelo').value = a.modelo;
+            document.getElementById('v-dominio').value = a.dominio;
+            document.getElementById('v-anio').value = a.anio;
+            document.getElementById('v-vin').value = a.vin;
+            document.getElementById('v-motor').value = a.motor;
+            document.getElementById('v-precio').value = a.precio;
+            document.getElementById('v-index').value = a.id; // Guardamos el ID de Firebase
+            document.getElementById('btn-save-auto').innerText = "Actualizar Unidad";
+            window.scrollTo(0,0);
         }
 
         function editCliente(i) {
-            const c = clientes[i];
+            const c = window.clientes[i];
             document.getElementById('c-nombre').value = c.nombre;
             document.getElementById('c-dni').value = c.dni;
             document.getElementById('c-nac').value = c.nac;
@@ -238,13 +285,9 @@
             document.getElementById('c-email').value = c.email;
             document.getElementById('c-ocupacion').value = c.ocupacion;
             document.getElementById('c-domicilio').value = c.domicilio;
-            document.getElementById('c-index').value = i;
+            document.getElementById('c-index').value = c.id; // Guardamos el ID de Firebase
             document.getElementById('btn-save-cliente').innerText = "Actualizar Cliente";
             window.scrollTo(0,0);
-        }
-
-        function deleteCliente(i) {
-            if(confirm('¿Eliminar cliente?')) { clientes.splice(i, 1); localStorage.setItem('cem_c', JSON.stringify(clientes)); render(); }
         }
 
         function clearInputs(viewId) {
@@ -252,32 +295,40 @@
         }
 
         function render() {
-            document.querySelector('#tabla-autos tbody').innerHTML = autos.map((a, i) => `
+            const tbodyAutos = document.querySelector('#tabla-autos tbody');
+            const tbodyClientes = document.querySelector('#tabla-clientes tbody');
+            
+            if(tbodyAutos) {
+                tbodyAutos.innerHTML = window.autos.map((a, i) => `
                 <tr>
                     <td><b>${a.marca} ${a.modelo} (${a.anio})</b></td>
                     <td>${a.dominio}</td>
                     <td>$${Number(a.precio).toLocaleString()}</td>
                     <td>
                         <button class="btn-edit" onclick="editAuto(${i})">Editar</button>
-                        <button class="btn-del" onclick="deleteAuto(${i})">Borrar</button>
+                        <button class="btn-del" onclick="deleteAuto('${a.id}')">Borrar</button>
                     </td>
                 </tr>`).join('');
-            document.querySelector('#tabla-clientes tbody').innerHTML = clientes.map((c, i) => `
+            }
+            
+            if(tbodyClientes) {
+                tbodyClientes.innerHTML = window.clientes.map((c, i) => `
                 <tr>
                     <td><b>${c.nombre}</b></td>
                     <td>${c.dni}</td>
                     <td>${c.tel || 'S/D'}</td>
                     <td>
                         <button class="btn-edit" onclick="editCliente(${i})">Editar</button>
-                        <button class="btn-del" onclick="deleteCliente(${i})">Borrar</button>
+                        <button class="btn-del" onclick="deleteCliente('${c.id}')">Borrar</button>
                     </td>
                 </tr>`).join('');
+            }
             updateSelects();
         }
 
         function updateSelects() {
-            const optA = autos.map((a,i) => `<option value="${i}">${a.marca} ${a.modelo} - ${a.dominio}</option>`).join('');
-            const optC = clientes.map((c,i) => `<option value="${i}">${c.nombre} (${c.dni})</option>`).join('');
+            const optA = window.autos.map((a,i) => `<option value="${i}">${a.marca} ${a.modelo} - ${a.dominio}</option>`).join('');
+            const optC = window.clientes.map((c,i) => `<option value="${i}">${c.nombre} (${c.dni})</option>`).join('');
             ['cv', 'np'].forEach(t => {
                 const sA = document.getElementById(`sel-auto-${t}`);
                 const sC = document.getElementById(`sel-cliente-${t}`);
@@ -287,8 +338,8 @@
         }
 
         function generateLegalPDF(type) {
-            const a = autos[document.getElementById(`sel-auto-${type}`).value];
-            const c = clientes[document.getElementById(`sel-cliente-${type}`).value];
+            const a = window.autos[document.getElementById(`sel-auto-${type}`).value];
+            const c = window.clientes[document.getElementById(`sel-cliente-${type}`).value];
             if(!a || !c) return alert('Seleccione unidad y cliente');
 
             const win = window.open('', '_blank');
@@ -415,9 +466,6 @@
             `);
             win.document.close();
         }
-
-        render();
-        updateSelects();
     </script>
 </body>
 </html>
