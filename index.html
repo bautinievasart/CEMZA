@@ -379,25 +379,105 @@
                 `;
             }
 
-            win.document.write(`
-                <html><head><style>
-                    body { font-family: sans-serif; padding: 40px; line-height: 1.5; color: #333; }
-                    .doc-header { text-align: center; font-weight: bold; font-size: 18px; border: 2px solid #000; padding: 10px; margin-bottom: 20px; }
-                    .st { font-weight: bold; text-decoration: underline; margin-top: 15px; font-size: 12px; }
-                    .txt { font-size: 11px; text-align: justify; }
-                    .box { border: 1px solid #ccc; padding: 10px; font-size: 11px; margin: 5px 0; background: #f9f9f9; }
-                    .sigs { display: flex; justify-content: space-between; margin-top: 60px; }
-                    .sig-box { width: 200px; border-top: 1px solid #000; text-align: center; font-size: 10px; padding-top: 5px; }
-                </style></head>
-                <body onload="window.print()">
-                    <div style="font-weight:bold; font-size:22px">CEMZA <span style="color:#2563eb">AUTOMOTORES</span></div>
-                    <hr>
-                    ${content}
-                    <div class="sigs">
-                        <div class="sig-box">FIRMA COMPRADOR</div>
-                        <div class="sig-box">CEMZA AUTOMOTORES</div>
-                    </div>
-                </body></html>
+win.document.write(`
+<html>
+<head>
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        padding: 50px;
+        color: #1e293b;
+        line-height: 1.6;
+        background: #ffffff;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 12px;
+        margin-bottom: 25px;
+    }
+
+    .brand {
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    .brand span {
+        color: #2563eb;
+    }
+
+    .doc-header {
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        margin: 25px 0;
+    }
+
+    .st {
+        margin-top: 20px;
+        font-size: 12px;
+        font-weight: bold;
+        color: #2563eb;
+    }
+
+    .txt {
+        font-size: 11px;
+        text-align: justify;
+        margin-top: 6px;
+    }
+
+    .box {
+        border: 1px solid #e2e8f0;
+        padding: 12px;
+        font-size: 11px;
+        margin-top: 8px;
+        background: #f8fafc;
+    }
+
+    .sigs {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 70px;
+    }
+
+    .sig-box {
+        width: 220px;
+        text-align: center;
+        font-size: 10px;
+    }
+
+    .sig-line {
+        border-top: 1px solid #000;
+        margin-bottom: 5px;
+    }
+</style>
+</head>
+
+<body onload="window.print()">
+
+    <div class="header">
+        <div class="brand">CEMZA <span>AUTOMOTORES</span></div>
+        <div style="font-size:11px; color:#64748b;">Documento generado digitalmente</div>
+    </div>
+
+    ${content}
+
+    <div class="sigs">
+        <div class="sig-box">
+            <div class="sig-line"></div>
+            FIRMA COMPRADOR
+        </div>
+        <div class="sig-box">
+            <div class="sig-line"></div>
+            CEMZA AUTOMOTORES
+        </div>
+    </div>
+
+</body>
+</html>
             `);
             win.document.close();
         };
