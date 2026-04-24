@@ -392,68 +392,91 @@
 
             const style = `
                 <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+                    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
                     @page { size: A4; margin: 0; }
-                    body { font-family: 'Plus Jakarta Sans', sans-serif; padding: 30px; color: #0f172a; line-height: 1.2; background: #fff; width: 210mm; height: 297mm; position: relative; overflow: hidden; }
-                    .doc-header { border-bottom: 4px solid #2563eb; padding-bottom: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-end; }
-                    .doc-header h1 { margin: 0; font-size: 24px; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: -1px; }
-                    .doc-header .brand { color: #2563eb; }
-                    .section-title { font-size: 11px; font-weight: 800; color: #2563eb; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; margin: 15px 0 10px 0; }
-                    .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-                    .data-item { padding: 4px 0; border-bottom: 1px solid #f1f5f9; }
-                    .data-item b { display: block; font-size: 8px; color: #64748b; text-transform: uppercase; margin-bottom: 2px; }
-                    .data-item span { font-size: 13px; font-weight: 600; color: #0f172a; }
-                    .legal-clausulas { font-size: 9px; text-align: justify; color: #475569; margin: 10px 0; display: block; }
-                    .table-summary { width: 100%; border-collapse: collapse; margin-top: 10px; }
-                    .table-summary th { text-align: left; background: #f8fafc; padding: 8px; font-size: 9px; color: #64748b; text-transform: uppercase; }
-                    .table-summary td { padding: 8px; border-bottom: 1px solid #e2e8f0; font-size: 11px; }
-                    .total-box { background: #0f172a; color: white; padding: 15px; border-radius: 8px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; }
-                    .total-box h2 { margin: 0; font-size: 18px; }
-                    .signature-area { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; position: absolute; bottom: 40px; width: calc(100% - 60px); }
-                    .sig-line { border-top: 1.5px solid #0f172a; text-align: center; padding-top: 8px; font-weight: 800; font-size: 10px; text-transform: uppercase; }
-                    @media print { .no-print { display: none; } body { padding: 30px; } }
-                    .btn-print { background: #2563eb; color: white; padding: 10px 20px; border: none; border-radius: 6px; font-weight: 800; cursor: pointer; margin-bottom: 10px; }
+                    body { font-family: 'Plus Jakarta Sans', sans-serif; padding: 25px; color: #0f172a; line-height: 1.1; background: #fff; width: 210mm; height: 297mm; position: relative; overflow: hidden; font-size: 10px; }
+                    .header-main { border-bottom: 3px solid #2563eb; padding-bottom: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+                    .header-main h1 { margin: 0; font-size: 20px; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: -0.5px; }
+                    .header-main .brand { color: #2563eb; }
+                    
+                    .section-head { font-size: 9px; font-weight: 800; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; margin: 8px 0 5px 0; }
+                    
+                    .grid-data { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 8px; }
+                    .item-box { padding: 4px 6px; border: 1px solid #f1f5f9; border-radius: 4px; background: #f8fafc; }
+                    .item-box b { display: block; font-size: 7px; color: #64748b; text-transform: uppercase; margin-bottom: 1px; }
+                    .item-box span { font-size: 11px; font-weight: 700; color: #0f172a; word-break: break-all; }
+                    
+                    .legal-text { font-size: 8.2px; text-align: justify; color: #334155; line-height: 1.25; margin-bottom: 10px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px; background: #fff; }
+                    .legal-text p { margin-bottom: 4px; }
+                    
+                    .table-data { width: 100%; border-collapse: collapse; margin: 5px 0; }
+                    .table-data th { text-align: left; background: #f1f5f9; padding: 6px; font-size: 8px; color: #64748b; text-transform: uppercase; }
+                    .table-data td { padding: 6px; border-bottom: 1px solid #f1f5f9; font-size: 10px; font-weight: 600; }
+                    
+                    .summary-card { background: #0f172a; color: white; padding: 12px; border-radius: 8px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; }
+                    .summary-card h2 { margin: 0; font-size: 16px; font-weight: 800; }
+                    
+                    .footer-signatures { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 25px; border-top: 1px solid #cbd5e1; padding-top: 15px; }
+                    .sig-block { text-align: center; }
+                    .sig-line { border-top: 1px solid #0f172a; margin: 40px auto 5px auto; width: 80%; }
+                    .sig-label { font-size: 9px; font-weight: 800; text-transform: uppercase; color: #1e293b; }
+                    .sig-sub { font-size: 7px; color: #64748b; }
+                    
+                    .no-print { position: fixed; top: 10px; right: 10px; background: #2563eb; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: 700; z-index: 1000; }
+                    @media print { .no-print { display: none; } }
                 </style>
             `;
 
             if(type === 'boleto') {
                 win.document.write(`
                     <html><head>${style}</head><body>
-                        <button onclick="window.print()" class="btn-print no-print">IMPRIMIR</button>
-                        <div class="doc-header">
-                            <div><h1>BOLETO DE <span class="brand">COMPRAVENTA</span></h1></div>
-                            <div style="text-align:right; font-size: 10px;">FECHA: ${new Date().toLocaleDateString()}</div>
+                        <button onclick="window.print()" class="no-print">IMPRIMIR BOLETO</button>
+                        <div class="header-main">
+                            <h1>BOLETO DE <span class="brand">COMPRAVENTA</span></h1>
+                            <div style="text-align:right"><b>CERTIFICADO Nº:</b> ${Math.floor(Math.random()*900000)+100000}<br>FECHA: ${new Date().toLocaleDateString()}</div>
                         </div>
                         
-                        <div class="section-title">Partes</div>
-                        <div class="data-grid">
-                            <div class="data-item"><b>Vendedor</b><span>CEMZA AUTOMOTORES</span></div>
-                            <div class="data-item"><b>Comprador</b><span>${cliente.nombre}</span></div>
-                            <div class="data-item"><b>DNI/CUIT</b><span>${cliente.dni}</span></div>
-                            <div class="data-item"><b>Domicilio</b><span>${cliente.dir}</span></div>
+                        <div class="section-head">I. PARTES INTERVINIENTES</div>
+                        <div class="grid-data">
+                            <div class="item-box" style="grid-column: span 2"><b>Vendedor</b><span>CEMZA AUTOMOTORES S.A.</span></div>
+                            <div class="item-box" style="grid-column: span 2"><b>Comprador</b><span>${cliente.nombre}</span></div>
+                            <div class="item-box"><b>DNI/CUIT Comprador</b><span>${cliente.dni}</span></div>
+                            <div class="item-box" style="grid-column: span 2"><b>Domicilio Comprador</b><span>${cliente.dir}</span></div>
+                            <div class="item-box"><b>Teléfono</b><span>${cliente.tel}</span></div>
                         </div>
 
-                        <div class="section-title">Vehículo</div>
-                        <div class="data-grid">
-                            <div class="data-item"><b>Marca/Modelo</b><span>${auto.marca} ${auto.modelo}</span></div>
-                            <div class="data-item"><b>Dominio</b><span>${auto.dominio}</span></div>
-                            <div class="data-item"><b>Año/KM</b><span>${auto.anio} - ${auto.km} KM</span></div>
-                            <div class="data-item"><b>GNC/Doc</b><span>GNC: ${auto.gnc ? 'SI' : 'NO'} | 08: ${auto.firmado08 ? 'SI' : 'NO'}</span></div>
+                        <div class="section-head">II. OBJETO DE LA VENTA</div>
+                        <div class="grid-data">
+                            <div class="item-box"><b>Marca / Modelo</b><span>${auto.marca} ${auto.modelo}</span></div>
+                            <div class="item-box"><b>Dominio</b><span>${auto.dominio}</span></div>
+                            <div class="item-box"><b>Año</b><span>${auto.anio}</span></div>
+                            <div class="item-box"><b>Kilómetros</b><span>${auto.km} KM</span></div>
+                            <div class="item-box" style="grid-column: span 4"><b>Características Técnicas y Accesorios</b><span>${auto.caract || 'Estado estándar de fábrica conforme a su uso.'} | GNC: ${auto.gnc ? 'SI' : 'NO'} | 08: ${auto.firmado08 ? 'Firmado' : 'Pendiente'} | Verif: ${auto.verificado ? 'Apta' : 'Pendiente'}</span></div>
                         </div>
 
-                        <div class="section-title">Cláusulas Legales</div>
-                        <div class="legal-clausulas">
-                            <b>PRIMERA:</b> El Vendedor vende y entrega al Comprador el vehículo antes detallado. El Comprador declara conocer y aceptar el estado del mismo en que se encuentra.
-                            <b>SEGUNDA:</b> El precio de venta se pacta conforme a la Nota de Pedido adjunta y vinculada a la presente operación.
-                            <b>TERCERA:</b> El Vendedor declara que sobre el vehículo no pesan gravámenes ni embargos, entregándolo libre de deudas de patentes e infracciones hasta la firma del presente.
-                            <b>CUARTA:</b> A partir de la toma de posesión en ${f('cv-lugar')} el día ${f('cv-fecha-posesion')}, el Comprador asume toda responsabilidad civil y criminal por el uso del rodado, obligándose a realizar la transferencia de dominio en un plazo no mayor a 10 días hábiles.
-                            <b>QUINTA:</b> Las partes se someten a la jurisdicción de los Tribunales Ordinarios de la Ciudad de Córdoba, renunciando a cualquier otro fuero o jurisdicción.
-                            <br><br><b>OBSERVACIONES:</b> ${f('cv-obs')}
+                        <div class="section-head">III. CLÁUSULAS CONTRACTUALES</div>
+                        <div class="legal-text">
+                            <p><b>PRIMERA (Objeto):</b> El VENDEDOR vende y transfiere al COMPRADOR, quien acepta de conformidad, el vehículo individualizado anteriormente en el estado de uso y conservación en que se encuentra, el cual ha sido revisado previamente por el comprador, quien declara conocer y aceptar.</p>
+                            <p><b>SEGUNDA (Precio):</b> El precio total y convenido por esta operación se establece en los montos detallados en la Nota de Pedido vinculada, la cual forma parte integrante del presente contrato.</p>
+                            <p><b>TERCERA (Deudas y Gravámenes):</b> El VENDEDOR declara bajo juramento que sobre el vehículo no pesan embargos, prendas, inhibiciones ni gravámenes de ninguna naturaleza, y se compromete a entregar la unidad libre de deudas por patentes e infracciones devengadas hasta la fecha de toma de posesión.</p>
+                            <p><b>CUARTA (Transferencia):</b> El COMPRADOR se obliga irrevocablemente a formalizar la transferencia de dominio ante el Registro Seccional correspondiente en un plazo de diez (10) días hábiles a partir de la firma. Los gastos de transferencia, sellados e impuestos son a exclusivo cargo del COMPRADOR.</p>
+                            <p><b>QUINTA (Responsabilidad):</b> A partir de la entrega del rodado el día ${f('cv-fecha-posesion')} en ${f('cv-lugar')}, el COMPRADOR asume la total responsabilidad civil, penal y administrativa por el uso del mismo, eximiendo al VENDEDOR de toda responsabilidad por daños causados a terceros o bienes.</p>
+                            <p><b>SEXTA (Vicios):</b> Tratándose de una unidad usada, el COMPRADOR renuncia expresamente a reclamar por vicios redhibitorios o defectos de funcionamiento una vez retirada la unidad del establecimiento.</p>
+                            <p><b>SÉPTIMA (Jurisdicción):</b> Para todos los efectos legales, las partes se someten a la jurisdicción de los Tribunales Ordinarios de la Ciudad de Córdoba, renunciando a cualquier otro fuero o jurisdicción que pudiera corresponderles.</p>
+                            <p><b>OBSERVACIONES ADICIONALES:</b> ${f('cv-obs')}</p>
                         </div>
 
-                        <div class="signature-area">
-                            <div class="sig-line">CEMZA AUTOMOTORES</div>
-                            <div class="sig-line">COMPRADOR: ${cliente.nombre}</div>
+                        <div class="footer-signatures">
+                            <div class="sig-block">
+                                <div class="sig-line"></div>
+                                <div class="sig-label">CEMZA AUTOMOTORES S.A.</div>
+                                <div class="sig-sub">FIRMA VENDEDOR / SELLO AUTORIZADO</div>
+                            </div>
+                            <div class="sig-block">
+                                <div class="sig-line"></div>
+                                <div class="sig-label">${cliente.nombre}</div>
+                                <div class="sig-sub">FIRMA COMPRADOR / DNI: ${cliente.dni}</div>
+                            </div>
                         </div>
                     </body></html>
                 `);
@@ -461,54 +484,73 @@
                 let pgList = "";
                 const v = document.querySelectorAll('.pg-v');
                 const m = document.querySelectorAll('.pg-m');
-                v.forEach((date, i) => { if(date.value) pgList += `<tr><td>Pagaré ${i+1}</td><td>${date.value}</td><td style="text-align:right">$${Number(m[i].value).toLocaleString()}</td></tr>`; });
+                v.forEach((date, i) => { if(date.value) pgList += `<tr><td>Pagaré ${i+1}</td><td>Vence: ${date.value}</td><td style="text-align:right">$${Number(m[i].value).toLocaleString()}</td></tr>`; });
 
                 win.document.write(`
                     <html><head>${style}</head><body>
-                        <button onclick="window.print()" class="btn-print no-print">IMPRIMIR</button>
-                        <div class="doc-header">
-                            <div><h1>NOTA DE <span class="brand">PEDIDO</span></h1></div>
-                            <div style="text-align:right; font-size:10px;">FECHA: ${f('np-fecha-op')}</div>
+                        <button onclick="window.print()" class="no-print">IMPRIMIR NOTA</button>
+                        <div class="header-main">
+                            <h1>NOTA DE <span class="brand">PEDIDO Y LIQUIDACIÓN</span></h1>
+                            <div style="text-align:right"><b>PEDIDO Nº:</b> NP-${Date.now().toString().slice(-6)}<br>OPERACIÓN: ${f('np-fecha-op')}</div>
                         </div>
 
-                        <div class="data-grid">
-                            <div class="data-item"><b>Cliente</b><span>${cliente.nombre}</span></div>
-                            <div class="data-item"><b>Vehículo</b><span>${auto.marca} ${auto.modelo}</span></div>
+                        <div class="section-head">IDENTIFICACIÓN DE OPERACIÓN</div>
+                        <div class="grid-data">
+                            <div class="item-box" style="grid-column: span 2"><b>Cliente</b><span>${cliente.nombre} (DNI: ${cliente.dni})</span></div>
+                            <div class="item-box" style="grid-column: span 2"><b>Vehículo Objeto</b><span>${auto.marca} ${auto.modelo} (${auto.dominio})</span></div>
                         </div>
 
-                        <div class="section-title">Estructura Comercial</div>
-                        <table class="table-summary">
-                            <thead><tr><th>Concepto</th><th style="text-align:right">Monto</th></tr></thead>
+                        <div class="section-head">DETALLE FINANCIERO DE LA VENTA</div>
+                        <table class="table-data">
+                            <thead><tr><th>CONCEPTO</th><th style="text-align:right">IMPORTE</th></tr></thead>
                             <tbody>
-                                <tr><td>Precio de Venta</td><td style="text-align:right">$${Number(f('np-p-venta')).toLocaleString()}</td></tr>
-                                <tr><td>Reserva / Contado / Entrega</td><td style="text-align:right">-$${Number(Number(f('np-reserva')) + Number(f('np-contado')) + Number(f('np-entrega'))).toLocaleString()}</td></tr>
-                                <tr style="font-weight:800"><td>Capital a Financiar</td><td style="text-align:right">$${Number(f('np-total-finan')).toLocaleString()}</td></tr>
-                                <tr><td>Cuotas</td><td style="text-align:right">${f('np-cuotas')} x $${Number(f('np-cuota-valor')).toLocaleString()}</td></tr>
+                                <tr><td>PRECIO DE VENTA PACTADO</td><td style="text-align:right">$${Number(f('np-p-venta')).toLocaleString()}</td></tr>
+                                <tr><td>RESERVA DE UNIDAD EN GARANTÍA</td><td style="text-align:right">-$${Number(f('np-reserva')).toLocaleString()}</td></tr>
+                                <tr><td>CONTADO / CANCELACIÓN CONTRA FACTURA</td><td style="text-align:right">-$${Number(f('np-contado')).toLocaleString()}</td></tr>
+                                <tr><td>ENTREGA EFECTIVO / PERMUTA</td><td style="text-align:right">-$${Number(f('np-entrega')).toLocaleString()}</td></tr>
+                                <tr style="background:#f8fafc; font-weight:800; border-top: 2px solid #0f172a"><td>SALDO TOTAL A FINANCIAR</td><td style="text-align:right">$${Number(f('np-total-finan')).toLocaleString()}</td></tr>
+                                <tr><td>PLAN DE FINANCIACIÓN</td><td style="text-align:right">${f('np-cuotas')} Cuotas de $${Number(f('np-cuota-valor')).toLocaleString()}</td></tr>
                             </tbody>
                         </table>
 
                         ${pgList ? `
-                        <div class="section-title">Pagarés Instrumentados</div>
-                        <table class="table-summary">
+                        <div class="section-head">CRONOGRAMA DE PAGARÉS E INSTRUMENTOS</div>
+                        <table class="table-data">
                             <tbody>${pgList}</tbody>
                         </table>` : ''}
 
-                        <div class="section-title">Gastos Administrativos</div>
-                        <div class="data-grid">
-                            <div class="data-item"><b>Inscripción/Gestoría</b><span>$${Number(Number(f('g-ins')) + Number(f('g-tra'))).toLocaleString()}</span></div>
-                            <div class="data-item"><b>Prendarios/Otros</b><span>$${Number(Number(f('g-pre')) + Number(f('g-oto')) + Number(f('g-fle')) + Number(f('g-otr'))).toLocaleString()}</span></div>
-                        </div>
+                        <div class="section-head">LIQUIDACIÓN DE GASTOS DE ENTREGA Y PATENTAMIENTO</div>
+                        <table class="table-data">
+                            <tbody>
+                                <tr><td>Inscripción de Unidad / Aranceles Registro</td><td style="text-align:right">$${Number(f('g-ins')).toLocaleString()}</td></tr>
+                                <tr><td>Gestoría y Honorarios Transferencia</td><td style="text-align:right">$${Number(f('g-tra')).toLocaleString()}</td></tr>
+                                <tr><td>Derechos Prendarios e Impuestos</td><td style="text-align:right">$${Number(f('g-pre')).toLocaleString()}</td></tr>
+                                <tr><td>Gastos de Otorgamiento y Crédito</td><td style="text-align:right">$${Number(f('g-oto')).toLocaleString()}</td></tr>
+                                <tr><td>Flete, Formularios y Placas</td><td style="text-align:right">$${Number(f('g-fle')).toLocaleString()}</td></tr>
+                                <tr><td>Otros Gastos Administrativos / Sellados</td><td style="text-align:right">$${Number(f('g-otr')).toLocaleString()}</td></tr>
+                            </tbody>
+                        </table>
                         
-                        <div class="total-box">
-                            <h2>TOTAL GASTOS DE ENTREGA</h2>
+                        <div class="summary-card">
+                            <h2>TOTAL GASTOS A ABONAR POR CLIENTE</h2>
                             <h2>$${Number(f('np-g-total')).toLocaleString()}</h2>
                         </div>
 
-                        <div style="margin-top:15px; font-size:10px; color:#64748b">Operación gestionada por: <b>${f('np-vendedor')}</b></div>
+                        <div style="margin-top:12px; font-size:8px; color:#475569; border: 1px solid #e2e8f0; padding:6px; border-radius:4px">
+                            <b>IMPORTANTE:</b> Esta Nota de Pedido tiene carácter de declaración jurada. Los montos de cuotas y gastos están sujetos a variaciones de mercado hasta el momento de la liquidación final. La unidad solo será entregada una vez cancelados los gastos de entrega y firmada la documentación registral.
+                        </div>
 
-                        <div class="signature-area">
-                            <div class="sig-line">ACEPTACIÓN CLIENTE</div>
-                            <div class="sig-line">CEMZA AUTOMOTORES</div>
+                        <div style="margin-top:10px; font-size:9px;">Vendedor: <b>${f('np-vendedor')}</b></div>
+
+                        <div class="footer-signatures" style="margin-top: 15px">
+                            <div class="sig-block">
+                                <div class="sig-line"></div>
+                                <div class="sig-label">CLIENTE / CONFORMIDAD</div>
+                            </div>
+                            <div class="sig-block">
+                                <div class="sig-line"></div>
+                                <div class="sig-label">CEMZA AUTOMOTORES</div>
+                            </div>
                         </div>
                     </body></html>
                 `);
