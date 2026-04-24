@@ -387,92 +387,151 @@ win.document.write(`
         font-family: Arial, Helvetica, sans-serif;
         padding: 50px;
         color: #1e293b;
-        line-height: 1.6;
         background: #ffffff;
     }
 
-    .header {
+    .topbar {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        border-bottom: 2px solid #e2e8f0;
-        padding-bottom: 12px;
-        margin-bottom: 25px;
+        align-items: flex-start;
+        font-size: 11px;
+        color: #64748b;
+        margin-bottom: 10px;
     }
 
     .brand {
-        font-size: 22px;
-        font-weight: bold;
+        font-size: 26px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
     }
 
-    .brand span {
-        color: #2563eb;
-    }
-
-    .doc-header {
-        text-align: center;
-        font-size: 18px;
-        font-weight: bold;
-        margin: 25px 0;
-    }
-
-    .st {
-        margin-top: 20px;
-        font-size: 12px;
-        font-weight: bold;
-        color: #2563eb;
-    }
-
-    .txt {
+    .brand-sub {
         font-size: 11px;
-        text-align: justify;
-        margin-top: 6px;
+        color: #64748b;
+        margin-top: 2px;
+    }
+
+    .right-info {
+        text-align: right;
+        font-size: 11px;
+    }
+
+    .line {
+        height: 2px;
+        background: #0f172a;
+        margin: 15px 0 30px 0;
+    }
+
+    .title {
+        text-align: center;
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 1px;
+        margin-bottom: 30px;
+        color: #64748b;
+    }
+
+    .section {
+        margin-bottom: 20px;
+    }
+
+    .section-title {
+        font-size: 11px;
+        font-weight: 700;
+        color: #2563eb;
+        border-left: 3px solid #2563eb;
+        padding-left: 8px;
+        margin-bottom: 10px;
+    }
+
+    .card {
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 11px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        background: #fafafa;
+    }
+
+    .full {
+        grid-column: span 2;
+    }
+
+    .label {
+        font-size: 9px;
+        color: #64748b;
+        text-transform: uppercase;
+    }
+
+    .value {
+        font-weight: 600;
     }
 
     .box {
-        border: 1px solid #e2e8f0;
-        padding: 12px;
+        border-left: 3px solid #0f172a;
+        padding-left: 10px;
+        margin-top: 10px;
         font-size: 11px;
-        margin-top: 8px;
-        background: #f8fafc;
+    }
+
+    .legal {
+        font-size: 10px;
+        margin-top: 20px;
+        color: #334155;
+        text-align: justify;
     }
 
     .sigs {
         display: flex;
         justify-content: space-between;
         margin-top: 70px;
-    }
-
-    .sig-box {
-        width: 220px;
-        text-align: center;
         font-size: 10px;
+        text-align: center;
     }
 
     .sig-line {
-        border-top: 1px solid #000;
+        border-top: 1px solid #0f172a;
+        width: 220px;
         margin-bottom: 5px;
     }
+
 </style>
 </head>
 
 <body onload="window.print()">
 
-    <div class="header">
-        <div class="brand">CEMZA <span>AUTOMOTORES</span></div>
-        <div style="font-size:11px; color:#64748b;">Documento generado digitalmente</div>
+    <div class="topbar">
+        <div>${new Date().toLocaleString()}</div>
+        <div>Documento interno</div>
     </div>
+
+    <div style="display:flex; justify-content:space-between;">
+        <div>
+            <div class="brand">CEMZA</div>
+            <div class="brand-sub">AUTOMOTORES - EMBALSE</div>
+        </div>
+        <div class="right-info">
+            <div style="color:#2563eb; font-weight:700;">${type === 'cv' ? 'BOLETO DE COMPRAVENTA' : 'NOTA DE PEDIDO'}</div>
+            <div>FECHA: ${new Date().toLocaleDateString()}</div>
+        </div>
+    </div>
+
+    <div class="line"></div>
+
+    <div class="title">INSTRUMENTO PRIVADO DE COMPRA – VENTA</div>
 
     ${content}
 
     <div class="sigs">
-        <div class="sig-box">
+        <div>
             <div class="sig-line"></div>
-            FIRMA COMPRADOR
+            CEMZA AUTOMOTORES<br>VENDEDOR
         </div>
-        <div class="sig-box">
+        <div>
             <div class="sig-line"></div>
-            CEMZA AUTOMOTORES
+            ${c.nombre}<br>COMPRADOR
         </div>
     </div>
 
