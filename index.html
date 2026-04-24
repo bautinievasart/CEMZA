@@ -10,7 +10,7 @@
         :root {
             --primary: #0f172a; --accent: #2563eb; --sidebar-bg: #0f172a;
             --main-bg: #f8fafc; --text-dark: #0f172a; --text-light: #64748b; --danger: #ef4444;
-            --success: #10b981; --border: #e2e8f0;
+            --success: #10b981; --border: #e2e8f0; --warning: #f59e0b;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background: var(--main-bg); display: flex; color: var(--text-dark); min-height: 100vh; }
@@ -37,6 +37,9 @@
         .full { grid-column: span 4; }
         .half { grid-column: span 2; }
         .input-group { display: flex; flex-direction: column; gap: 8px; }
+        .checkbox-group { display: flex; align-items: center; gap: 10px; padding: 12px; background: #f8fafc; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; }
+        .checkbox-group input { width: auto; cursor: pointer; }
+        
         label { font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; }
         input, select, textarea { padding: 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; background: #f8fafc; transition: 0.2s; width: 100%; }
         input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); background: white; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
@@ -47,7 +50,9 @@
         .btn { padding: 16px; border-radius: 12px; font-weight: 700; border: none; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-accent { background: var(--accent); color: white; }
-        .btn-danger { background: var(--danger); color: white; padding: 8px 12px; font-size: 12px; width: auto; }
+        .btn-warning { background: var(--warning); color: white; padding: 8px 12px; font-size: 12px; width: auto; border-radius: 8px; }
+        .btn-danger { background: var(--danger); color: white; padding: 8px 12px; font-size: 12px; width: auto; border-radius: 8px; }
+        .action-btns { display: flex; gap: 8px; }
         
         /* Tables */
         .table-container { overflow-x: auto; margin-top: 20px; }
@@ -61,8 +66,10 @@
         .total-highlight { background: #eff6ff; border: 2px solid var(--accent); color: #1e40af; font-weight: 800; font-size: 1.1rem; }
         #pagares-container { grid-column: span 4; display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px dashed #cbd5e1; }
         .pagare-item { background: white; padding: 15px; border-radius: 10px; border: 1px solid var(--border); }
-        .badge { font-size: 10px; padding: 4px 8px; border-radius: 6px; font-weight: 700; text-transform: uppercase; }
+        .badge { font-size: 10px; padding: 4px 8px; border-radius: 6px; font-weight: 700; text-transform: uppercase; margin-right: 4px; }
         .bg-blue { background: #dbeafe; color: #1e40af; }
+        .bg-green { background: #d1fae5; color: #065f46; }
+        .bg-red { background: #fee2e2; color: #991b1b; }
 
         @media print { .sidebar, .btn, .card { display: none; } }
     </style>
@@ -83,6 +90,7 @@
         <section id="view-autos" class="view active">
             <h1>Gestión de Inventario</h1>
             <div class="card">
+                <input type="hidden" id="v-id">
                 <div class="grid">
                     <div class="input-group half"><label>Marca</label><input type="text" id="v-marca"></div>
                     <div class="input-group half"><label>Modelo</label><input type="text" id="v-modelo"></div>
@@ -90,12 +98,20 @@
                     <div class="input-group"><label>Dominio</label><input type="text" id="v-dominio"></div>
                     <div class="input-group"><label>Kilómetros</label><input type="number" id="v-km"></div>
                     <div class="input-group"><label>Precio de Venta ($)</label><input type="number" id="v-precio"></div>
-                    <button onclick="saveAuto()" class="btn btn-accent full">Guardar en Stock</button>
+                    
+                    <div class="section-divider">Documentación y Extras</div>
+                    <div class="checkbox-group"><input type="checkbox" id="v-08"><label>08 Firmado</label></div>
+                    <div class="checkbox-group"><input type="checkbox" id="v-verif"><label>Verificado</label></div>
+                    <div class="checkbox-group"><input type="checkbox" id="v-gnc"><label>GNC</label></div>
+                    <div class="input-group full"><label>Características y Detalles</label><textarea id="v-caract" rows="2" placeholder="Describa el estado general, equipamiento, etc."></textarea></div>
+                    
+                    <button id="btn-save-auto" onclick="saveAuto()" class="btn btn-accent full">Guardar en Stock</button>
+                    <button id="btn-cancel-auto" onclick="clearAutoForm()" class="btn btn-primary full" style="display:none">Cancelar Edición</button>
                 </div>
             </div>
             <div class="table-container">
                 <table>
-                    <thead><tr><th>Vehículo</th><th>Dominio</th><th>Año/KM</th><th>Precio</th><th>Acciones</th></tr></thead>
+                    <thead><tr><th>Vehículo</th><th>Documentación</th><th>Año/KM</th><th>Precio</th><th>Acciones</th></tr></thead>
                     <tbody id="tbody-autos"></tbody>
                 </table>
             </div>
@@ -105,12 +121,14 @@
         <section id="view-clientes" class="view">
             <h1>Cartera de Clientes</h1>
             <div class="card">
+                <input type="hidden" id="c-id">
                 <div class="grid">
                     <div class="input-group half"><label>Nombre y Apellido</label><input type="text" id="c-nombre"></div>
                     <div class="input-group half"><label>DNI / CUIT</label><input type="text" id="c-dni"></div>
                     <div class="input-group half"><label>Teléfono</label><input type="text" id="c-tel"></div>
                     <div class="input-group half"><label>Domicilio</label><input type="text" id="c-dir"></div>
-                    <button onclick="saveCliente()" class="btn btn-accent full">Registrar Cliente</button>
+                    <button id="btn-save-cliente" onclick="saveCliente()" class="btn btn-accent full">Registrar Cliente</button>
+                    <button id="btn-cancel-cliente" onclick="clearClienteForm()" class="btn btn-primary full" style="display:none">Cancelar Edición</button>
                 </div>
             </div>
             <div class="table-container">
@@ -140,7 +158,7 @@
             </div>
         </section>
 
-        <!-- PESTAÑA 4: NOTA DE PEDIDO (VERSION COMPLETA) -->
+        <!-- PESTAÑA 4: NOTA DE PEDIDO -->
         <section id="view-nota-pedido" class="view">
             <h1>Nota de Pedido Avanzada</h1>
             <div class="card">
@@ -186,7 +204,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = JSON.parse('{"projectId":"cemza-dms"}');
         const app = initializeApp(firebaseConfig);
@@ -199,52 +217,130 @@
         onSnapshot(collection(db, "autos"), (s) => { window.autos = s.docs.map(d => ({id:d.id, ...d.data()})); renderAutos(); refreshSelects(); });
         onSnapshot(collection(db, "clientes"), (s) => { window.clientes = s.docs.map(d => ({id:d.id, ...d.data()})); renderClientes(); refreshSelects(); });
 
-        // Logic Functions
+        // Logic Functions - AUTO
         window.saveAuto = async () => {
+            const id = document.getElementById('v-id').value;
             const data = {
                 marca: document.getElementById('v-marca').value,
                 modelo: document.getElementById('v-modelo').value,
                 anio: document.getElementById('v-anio').value,
                 dominio: document.getElementById('v-dominio').value,
                 km: document.getElementById('v-km').value,
-                precio: document.getElementById('v-precio').value
+                precio: document.getElementById('v-precio').value,
+                firmado08: document.getElementById('v-08').checked,
+                verificado: document.getElementById('v-verif').checked,
+                gnc: document.getElementById('v-gnc').checked,
+                caract: document.getElementById('v-caract').value
             };
-            await addDoc(collection(db, "autos"), data);
-            ['v-marca','v-modelo','v-anio','v-dominio','v-km','v-precio'].forEach(i => document.getElementById(i).value = '');
+            if(id) {
+                await updateDoc(doc(db, "autos", id), data);
+            } else {
+                await addDoc(collection(db, "autos"), data);
+            }
+            clearAutoForm();
         };
 
+        window.editAuto = (index) => {
+            const a = window.autos[index];
+            document.getElementById('v-id').value = a.id;
+            document.getElementById('v-marca').value = a.marca;
+            document.getElementById('v-modelo').value = a.modelo;
+            document.getElementById('v-anio').value = a.anio;
+            document.getElementById('v-dominio').value = a.dominio;
+            document.getElementById('v-km').value = a.km;
+            document.getElementById('v-precio').value = a.precio;
+            document.getElementById('v-08').checked = a.firmado08;
+            document.getElementById('v-verif').checked = a.verificado;
+            document.getElementById('v-gnc').checked = a.gnc;
+            document.getElementById('v-caract').value = a.caract || '';
+            
+            document.getElementById('btn-save-auto').innerText = 'Actualizar Vehículo';
+            document.getElementById('btn-cancel-auto').style.display = 'block';
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        };
+
+        window.clearAutoForm = () => {
+            document.getElementById('v-id').value = '';
+            ['v-marca','v-modelo','v-anio','v-dominio','v-km','v-precio','v-caract'].forEach(i => document.getElementById(i).value = '');
+            ['v-08','v-verif','v-gnc'].forEach(i => document.getElementById(i).checked = false);
+            document.getElementById('btn-save-auto').innerText = 'Guardar en Stock';
+            document.getElementById('btn-cancel-auto').style.display = 'none';
+        };
+
+        // Logic Functions - CLIENTE
         window.saveCliente = async () => {
+            const id = document.getElementById('c-id').value;
             const data = {
                 nombre: document.getElementById('c-nombre').value,
                 dni: document.getElementById('c-dni').value,
                 tel: document.getElementById('c-tel').value,
                 dir: document.getElementById('c-dir').value
             };
-            await addDoc(collection(db, "clientes"), data);
-            ['c-nombre','c-dni','c-tel','c-dir'].forEach(i => document.getElementById(i).value = '');
+            if(id) {
+                await updateDoc(doc(db, "clientes", id), data);
+            } else {
+                await addDoc(collection(db, "clientes"), data);
+            }
+            clearClienteForm();
         };
 
-        window.delItem = async (c, id) => await deleteDoc(doc(db, c, id));
+        window.editCliente = (index) => {
+            const c = window.clientes[index];
+            document.getElementById('c-id').value = c.id;
+            document.getElementById('c-nombre').value = c.nombre;
+            document.getElementById('c-dni').value = c.dni;
+            document.getElementById('c-tel').value = c.tel;
+            document.getElementById('c-dir').value = c.dir;
+            
+            document.getElementById('btn-save-cliente').innerText = 'Actualizar Cliente';
+            document.getElementById('btn-cancel-cliente').style.display = 'block';
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        };
+
+        window.clearClienteForm = () => {
+            document.getElementById('c-id').value = '';
+            ['c-nombre','c-dni','c-tel','c-dir'].forEach(i => document.getElementById(i).value = '');
+            document.getElementById('btn-save-cliente').innerText = 'Registrar Cliente';
+            document.getElementById('btn-cancel-cliente').style.display = 'none';
+        };
+
+        window.delItem = async (c, id) => {
+            if(confirm("¿Seguro que desea eliminar este registro?")) await deleteDoc(doc(db, c, id));
+        };
 
         function renderAutos() {
-            document.getElementById('tbody-autos').innerHTML = window.autos.map(a => `
+            document.getElementById('tbody-autos').innerHTML = window.autos.map((a, i) => `
                 <tr>
-                    <td><b>${a.marca} ${a.modelo}</b></td>
-                    <td><span class="badge bg-blue">${a.dominio}</span></td>
+                    <td><b>${a.marca} ${a.modelo}</b><br><span class="badge bg-blue">${a.dominio}</span></td>
+                    <td>
+                        <span class="badge ${a.firmado08 ? 'bg-green' : 'bg-red'}">08: ${a.firmado08 ? 'SI' : 'NO'}</span>
+                        <span class="badge ${a.verificado ? 'bg-green' : 'bg-red'}">VERIF: ${a.verificado ? 'SI' : 'NO'}</span>
+                        <span class="badge ${a.gnc ? 'bg-green' : 'bg-blue'}">GNC: ${a.gnc ? 'SI' : 'NO'}</span>
+                    </td>
                     <td>Año ${a.anio} | ${a.km}km</td>
                     <td>$${Number(a.precio).toLocaleString()}</td>
-                    <td><button onclick="delItem('autos','${a.id}')" class="btn-danger">Borrar</button></td>
+                    <td>
+                        <div class="action-btns">
+                            <button onclick="editAuto(${i})" class="btn-warning">Editar</button>
+                            <button onclick="delItem('autos','${a.id}')" class="btn-danger">Borrar</button>
+                        </div>
+                    </td>
                 </tr>
             `).join('');
         }
 
         function renderClientes() {
-            document.getElementById('tbody-clientes').innerHTML = window.clientes.map(c => `
+            document.getElementById('tbody-clientes').innerHTML = window.clientes.map((c, i) => `
                 <tr>
                     <td><b>${c.nombre}</b></td>
                     <td>${c.dni}</td>
                     <td>${c.tel}</td>
-                    <td><button onclick="delItem('clientes','${c.id}')" class="btn-danger">Borrar</button></td>
+                    <td>
+                        <div class="action-btns">
+                            <button onclick="editCliente(${i})" class="btn-warning">Editar</button>
+                            <button onclick="delItem('clientes','${c.id}')" class="btn-danger">Borrar</button>
+                        </div>
+                    </td>
                 </tr>
             `).join('');
         }
@@ -258,7 +354,6 @@
             });
         }
 
-        // Automatic Gasto Sum
         document.querySelectorAll('.gasto-calc').forEach(input => {
             input.addEventListener('input', () => {
                 let sum = 0;
@@ -283,7 +378,7 @@
             }
         };
 
-        // Document Generation
+        // Document Generation con Estética Brutal
         window.generateDoc = (type) => {
             const aIdx = document.getElementById(`${type === 'boleto' ? 'cv' : 'np'}-sel-auto`).value;
             const cIdx = document.getElementById(`${type === 'boleto' ? 'cv' : 'np'}-sel-cliente`).value;
@@ -294,18 +389,69 @@
             const f = (id) => document.getElementById(id).value;
             const win = window.open('', '_blank');
 
+            const style = `
+                <style>
+                    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+                    body { font-family: 'Plus Jakarta Sans', sans-serif; padding: 60px; color: #1e293b; line-height: 1.5; background: #fff; }
+                    .doc-header { border-bottom: 5px solid #2563eb; padding-bottom: 20px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end; }
+                    .doc-header h1 { margin: 0; font-size: 32px; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: -1px; }
+                    .doc-header .brand { color: #2563eb; }
+                    .section-title { font-size: 14px; font-weight: 800; color: #2563eb; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin: 30px 0 15px 0; }
+                    .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+                    .data-item { padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+                    .data-item b { display: block; font-size: 10px; color: #64748b; text-transform: uppercase; margin-bottom: 4px; }
+                    .data-item span { font-size: 15px; font-weight: 600; color: #0f172a; }
+                    .table-summary { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                    .table-summary th { text-align: left; background: #f8fafc; padding: 12px; font-size: 11px; color: #64748b; text-transform: uppercase; }
+                    .table-summary td { padding: 12px; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
+                    .total-box { background: #0f172a; color: white; padding: 25px; border-radius: 12px; margin-top: 30px; display: flex; justify-content: space-between; align-items: center; }
+                    .total-box h2 { margin: 0; font-size: 24px; }
+                    .signature-area { margin-top: 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; }
+                    .sig-line { border-top: 2px solid #0f172a; text-align: center; padding-top: 10px; font-weight: 800; font-size: 12px; text-transform: uppercase; }
+                    @media print { .no-print { display: none; } }
+                    .btn-print { background: #2563eb; color: white; padding: 15px 30px; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; margin-bottom: 20px; }
+                </style>
+            `;
+
             if(type === 'boleto') {
                 win.document.write(`
-                    <html><head><style>body{font-family:sans-serif; padding:50px; line-height:1.6} h1{text-align:center; border-bottom:2px solid #000}</style></head>
-                    <body>
-                        <h1>BOLETO DE COMPRAVENTA AUTOMOTOR</h1>
-                        <p>En la ciudad de ${f('cv-lugar')}, a los ${new Date().toLocaleDateString()}, entre el vendedor <b>CEMZA AUTOMOTORES</b> y el comprador <b>${cliente.nombre}</b>, DNI <b>${cliente.dni}</b>...</p>
-                        <p><b>OBJETO:</b> Se transfiere la unidad Marca <b>${auto.marca}</b> Modelo <b>${auto.modelo}</b>, Dominio <b>${auto.dominio}</b>, Año <b>${auto.anio}</b>.</p>
-                        <p><b>POSESIÓN:</b> Se pacta la entrega para el día ${f('cv-fecha-posesion')}.</p>
-                        <p><b>OBSERVACIONES:</b> ${f('cv-obs')}</p>
-                        <div style="margin-top:100px; display:flex; justify-content:space-between">
-                            <div style="border-top:1px solid #000; width:200px; text-align:center">Vendedor</div>
-                            <div style="border-top:1px solid #000; width:200px; text-align:center">Comprador</div>
+                    <html><head>${style}</head><body>
+                        <button onclick="window.print()" class="btn-print no-print">IMPRIMIR DOCUMENTO</button>
+                        <div class="doc-header">
+                            <div><h1>BOLETO DE <span class="brand">COMPRAVENTA</span></h1><p>Documento Legal de Transferencia</p></div>
+                            <div style="text-align:right"><b>FECHA:</b> ${new Date().toLocaleDateString()}</div>
+                        </div>
+                        
+                        <div class="section-title">Partes Intervinientes</div>
+                        <div class="data-grid">
+                            <div class="data-item"><b>Vendedor</b><span>CEMZA AUTOMOTORES</span></div>
+                            <div class="data-item"><b>Comprador</b><span>${cliente.nombre}</span></div>
+                            <div class="data-item"><b>DNI / CUIT</b><span>${cliente.dni}</span></div>
+                            <div class="data-item"><b>Domicilio Comprador</b><span>${cliente.dir}</span></div>
+                        </div>
+
+                        <div class="section-title">Detalles del Objeto</div>
+                        <div class="data-grid">
+                            <div class="data-item"><b>Marca y Modelo</b><span>${auto.marca} ${auto.modelo}</span></div>
+                            <div class="data-item"><b>Dominio</b><span>${auto.dominio}</span></div>
+                            <div class="data-item"><b>Año</b><span>${auto.anio}</span></div>
+                            <div class="data-item"><b>Kilometraje</b><span>${auto.km} KM</span></div>
+                        </div>
+
+                        <div class="section-title">Condiciones Técnicas</div>
+                        <div class="data-grid">
+                            <div class="data-item"><b>GNC Instalado</b><span>${auto.gnc ? 'SÍ' : 'NO'}</span></div>
+                            <div class="data-item"><b>08 Firmado</b><span>${auto.firmado08 ? 'SÍ' : 'NO'}</span></div>
+                            <div class="data-item"><b>Verificación Policial</b><span>${auto.verificado ? 'SÍ' : 'NO'}</span></div>
+                        </div>
+
+                        <div class="section-title">Cláusulas y Posesión</div>
+                        <p style="font-size: 14px;">El vendedor transfiere la propiedad del vehículo arriba mencionado al comprador. La entrega y toma de posesión se pacta para la ciudad de ${f('cv-lugar')} en la fecha ${f('cv-fecha-posesion')}.</p>
+                        <p style="font-size: 14px;"><b>OBSERVACIONES:</b> ${f('cv-obs')}</p>
+
+                        <div class="signature-area">
+                            <div class="sig-line">Firma Vendedor (Sello Cemza)</div>
+                            <div class="sig-line">Firma Comprador</div>
                         </div>
                     </body></html>
                 `);
@@ -313,53 +459,60 @@
                 let pgList = "";
                 const v = document.querySelectorAll('.pg-v');
                 const m = document.querySelectorAll('.pg-m');
-                v.forEach((date, i) => { if(date.value) pgList += `<li>Pagaré ${i+1}: Vence ${date.value} por $${Number(m[i].value).toLocaleString()}</li>`; });
+                v.forEach((date, i) => { if(date.value) pgList += `<tr><td>Pagaré N° ${i+1}</td><td>Vence: ${date.value}</td><td style="text-align:right">$${Number(m[i].value).toLocaleString()}</td></tr>`; });
 
                 win.document.write(`
-                    <html><head><style>
-                        body{font-family:sans-serif; padding:40px; color:#1e293b}
-                        .box{border:1px solid #cbd5e1; padding:20px; border-radius:10px; margin-bottom:20px}
-                        .header{display:flex; justify-content:space-between; align-items:center; border-bottom:4px solid #2563eb; padding-bottom:10px}
-                        .grid{display:grid; grid-template-columns: 1fr 1fr; gap:20px}
-                    </style></head>
-                    <body>
-                        <div class="header">
-                            <div><h1 style="margin:0; color:#2563eb">CEMZA AUTOMOTORES</h1><p>Nota de Pedido N° OP-${Math.floor(Math.random()*10000)}</p></div>
-                            <div style="text-align:right">Fecha: ${f('np-fecha-op')}</div>
+                    <html><head>${style}</head><body>
+                        <button onclick="window.print()" class="btn-print no-print">IMPRIMIR DOCUMENTO</button>
+                        <div class="doc-header">
+                            <div><h1>NOTA DE <span class="brand">PEDIDO</span></h1><p>Operación N° OP-${Math.floor(Math.random()*90000) + 10000}</p></div>
+                            <div style="text-align:right"><b>FECHA:</b> ${f('np-fecha-op')}</div>
                         </div>
-                        <div class="box">
-                            <h3>DATOS DE OPERACIÓN</h3>
-                            <div class="grid">
-                                <div><b>Comprador:</b> ${cliente.nombre}<br><b>DNI:</b> ${cliente.dni}</div>
-                                <div><b>Unidad:</b> ${auto.marca} ${auto.modelo}<br><b>Dominio:</b> ${auto.dominio}</div>
-                            </div>
+
+                        <div class="data-grid">
+                            <div class="data-item"><b>Cliente</b><span>${cliente.nombre}</span></div>
+                            <div class="data-item"><b>Vehículo</b><span>${auto.marca} ${auto.modelo} (${auto.dominio})</span></div>
                         </div>
-                        <div class="box">
-                            <h3>PLAN DE PAGOS Y FINANCIACIÓN</h3>
-                            <div class="grid">
-                                <div>Precio Venta: $${Number(f('np-p-venta')).toLocaleString()}</div>
-                                <div>Reserva en Garantía: $${Number(f('np-reserva')).toLocaleString()}</div>
-                                <div>Contado Contra Factura: $${Number(f('np-contado')).toLocaleString()}</div>
-                                <div>Entrega Efectivo: $${Number(f('np-entrega')).toLocaleString()}</div>
-                                <div><b>Total a Financiar:</b> $${Number(f('np-total-finan')).toLocaleString()}</div>
-                                <div>Cuotas: ${f('np-cuotas')} de $${Number(f('np-cuota-valor')).toLocaleString()}</div>
-                            </div>
-                            <div style="margin-top:15px"><b>Instrumentos (Pagarés):</b><ul>${pgList || "No aplica"}</ul></div>
+
+                        <div class="section-title">Liquidación de la Operación</div>
+                        <table class="table-summary">
+                            <thead><tr><th>Concepto</th><th style="text-align:right">Monto</th></tr></thead>
+                            <tbody>
+                                <tr><td>Precio de Venta</td><td style="text-align:right">$${Number(f('np-p-venta')).toLocaleString()}</td></tr>
+                                <tr><td>Reserva en Garantía</td><td style="text-align:right">($${Number(f('np-reserva')).toLocaleString()})</td></tr>
+                                <tr><td>Contado Contra Factura</td><td style="text-align:right">$${Number(f('np-contado')).toLocaleString()}</td></tr>
+                                <tr><td>Entrega de Efectivo</td><td style="text-align:right">$${Number(f('np-entrega')).toLocaleString()}</td></tr>
+                            </tbody>
+                        </table>
+
+                        <div class="section-title">Financiación y Cuotas</div>
+                        <div class="data-grid">
+                            <div class="data-item"><b>Capital Financiado</b><span>$${Number(f('np-total-finan')).toLocaleString()}</span></div>
+                            <div class="data-item"><b>Plan de Cuotas</b><span>${f('np-cuotas')} cuotas de $${Number(f('np-cuota-valor')).toLocaleString()}</span></div>
                         </div>
-                        <div class="box" style="background:#f8fafc">
-                            <h3>GASTOS DE ENTREGA</h3>
-                            <div class="grid">
-                                <div>Inscripción: $${f('g-ins')}</div>
-                                <div>Transferencia: $${f('g-tra')}</div>
-                                <div>Prendarios: $${f('g-pre')}</div>
-                                <div>Flete/Form: $${f('g-fle')}</div>
-                            </div>
-                            <h2 style="text-align:right; color:#2563eb">TOTAL GASTOS: $${Number(f('np-g-total')).toLocaleString()}</h2>
+
+                        ${pgList ? `
+                        <div class="section-title">Vencimientos Instrumentados (Pagarés)</div>
+                        <table class="table-summary">
+                            <tbody>${pgList}</tbody>
+                        </table>` : ''}
+
+                        <div class="section-title">Gastos de Entrega y Patentamiento</div>
+                        <div class="data-grid">
+                            <div class="data-item"><b>Inscripción / Transferencia</b><span>$${Number(Number(f('g-ins')) + Number(f('g-tra'))).toLocaleString()}</span></div>
+                            <div class="data-item"><b>Gastos Prendarios / Flete</b><span>$${Number(Number(f('g-pre')) + Number(f('g-fle'))).toLocaleString()}</span></div>
                         </div>
-                        <p>Vendedor Interviniente: <b>${f('np-vendedor')}</b></p>
-                        <div style="margin-top:80px; display:flex; justify-content:space-around">
-                            <div style="border-top:1px solid #000; width:200px; text-align:center">Firma Cliente</div>
-                            <div style="border-top:1px solid #000; width:200px; text-align:center">Firma Autorizada CEMZA</div>
+                        
+                        <div class="total-box">
+                            <h2>TOTAL GASTOS ADICIONALES</h2>
+                            <h2>$${Number(f('np-g-total')).toLocaleString()}</h2>
+                        </div>
+
+                        <div style="margin-top:20px; font-size:12px; color:#64748b">Vendedor Asignado: <b>${f('np-vendedor')}</b></div>
+
+                        <div class="signature-area">
+                            <div class="sig-line">Conformidad Cliente</div>
+                            <div class="sig-line">Autorización Gerencia</div>
                         </div>
                     </body></html>
                 `);
