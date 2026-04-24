@@ -3,68 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CEMZA DMS | Edición Profesional Total</title>
+    <title>CEMZA DMS | Gestión Profesional</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- 1. BLOQUE ESTÉTICO (CSS) -->
     <style>
         :root {
             --primary: #0f172a; --accent: #2563eb; --sidebar-bg: #0f172a;
             --main-bg: #f8fafc; --text-dark: #0f172a; --text-light: #64748b; --danger: #ef4444;
-            --success: #10b981;
+            --success: #10b981; --warning-bg: #fef2f2; --warning-border: #fee2e2;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background: var(--main-bg); display: flex; color: var(--text-dark); min-height: 100vh; }
 
-        /* SIDEBAR */
+        /* SIDEBAR & NAV */
         .sidebar { width: 260px; background: var(--sidebar-bg); height: 100vh; position: fixed; display: flex; flex-direction: column; padding: 30px 20px; color: white; z-index: 100; }
         .logo { font-size: 24px; font-weight: 800; letter-spacing: -1px; margin-bottom: 50px; }
         .logo span { color: var(--accent); }
         .nav-item { padding: 14px 18px; border-radius: 12px; margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: 0.3s; color: #94a3b8; }
         .nav-item:hover { background: rgba(255,255,255,0.05); color: white; }
         .nav-item.active { background: var(--accent); color: white; }
-        .nav-item svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
 
-        /* MAIN CONTENT */
+        /* MAIN LAYOUT */
         .main { margin-left: 260px; flex: 1; padding: 40px; max-width: calc(100% - 260px); }
         .view { display: none; }
         .view.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* COMPONENTES DE UI */
         .card { background: white; border-radius: 20px; padding: 30px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 25px; }
         h1 { font-size: 28px; font-weight: 800; margin-bottom: 25px; color: var(--primary); }
-        
-        /* FORMULARIO GRID */
         .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
         .full { grid-column: span 4; }
         .half { grid-column: span 2; }
         .input-group { display: flex; flex-direction: column; gap: 8px; }
         label { font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; }
         input, select, textarea { padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; background: #f8fafc; transition: 0.2s; width: 100%; }
-        input:focus { outline: none; border-color: var(--accent); background: white; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
-
+        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); background: white; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
         .section-divider { grid-column: 1/-1; padding: 25px 0 10px 0; border-bottom: 2px solid #f1f5f9; margin-bottom: 10px; font-size: 13px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
-        .section-divider::after { content: ""; height: 1px; background: #f1f5f9; flex: 1; }
 
-        /* BOTONES */
-        .btn { background: var(--primary); color: white; padding: 16px; border-radius: 12px; font-weight: 700; border: none; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; }
-        .btn:hover { background: #1e293b; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        /* BOTONES Y TABLAS */
+        .btn { background: var(--primary); color: white; padding: 16px; border-radius: 12px; font-weight: 700; border: none; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; }
         .btn-accent { background: var(--accent); }
-        .btn-accent:hover { background: #1d4ed8; }
-
-        /* TABLAS */
-        table { width: 100%; border-collapse: separate; border-spacing: 0 10px; margin-top: 10px; }
-        th { text-align: left; padding: 10px 15px; font-size: 11px; color: var(--text-light); text-transform: uppercase; }
-        td { background: white; padding: 18px 15px; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
+        td { background: white; padding: 18px 15px; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; font-size: 14px; transition: 0.3s; }
         tr td:first-child { border-left: 1px solid #e2e8f0; border-radius: 12px 0 0 12px; }
         tr td:last-child { border-right: 1px solid #e2e8f0; border-radius: 0 12px 12px 0; }
         
-        .action-btns { display: flex; gap: 8px; justify-content: flex-end; }
-        .btn-small { padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; border: none; cursor: pointer; }
-        .btn-edit { background: #eff6ff; color: var(--accent); }
-        .btn-del { background: #fef2f2; color: var(--danger); }
+        /* Fila en Alistaje */
+        tr.alistaje td { background: var(--warning-bg); border-color: var(--warning-border); }
+        
+        .btn-small { padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; border: none; cursor: pointer; background: #f1f5f9; margin-left: 4px; }
+        
+        /* Badges */
+        .badge { font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 800; text-transform: uppercase; }
+        .bg-blue { background: #dbeafe; color: #1e40af; }
+        .bg-gray { background: #f1f5f9; color: #475569; }
+        .bg-red { background: #fee2e2; color: #b91c1c; }
+        .bg-green { background: #dcfce7; color: #15803d; }
     </style>
 </head>
 <body>
 
+    <!-- 2. BLOQUE DE ESTRUCTURA (HTML) -->
     <nav class="sidebar">
         <div class="logo">CEMZA<span>.</span>DMS</div>
         <div class="nav-item active" onclick="switchView('view-autos', this)">Inventario</div>
@@ -74,101 +75,110 @@
     </nav>
 
     <main class="main">
+        <!-- VISTA INVENTARIO -->
         <section id="view-autos" class="view active">
-            <h1>Gestión de Unidades</h1>
+            <h1>Inventario de Unidades</h1>
             <div class="card">
                 <input type="hidden" id="v-index" value="-1">
                 <div class="grid">
                     <div class="input-group half"><label>Marca</label><input type="text" id="v-marca" placeholder="Ej: Toyota"></div>
                     <div class="input-group half"><label>Modelo</label><input type="text" id="v-modelo" placeholder="Ej: Hilux SRX"></div>
-                    <div class="input-group"><label>Dominio</label><input type="text" id="v-dominio" placeholder="ABC-123"></div>
-                    <div class="input-group"><label>Año</label><input type="number" id="v-anio" placeholder="2024"></div>
-                    <div class="input-group"><label>Nº Chasis</label><input type="text" id="v-vin"></div>
-                    <div class="input-group"><label>Nº Motor</label><input type="text" id="v-motor"></div>
-                    <div class="input-group half"><label>Precio de Venta ($)</label><input type="number" id="v-precio"></div>
-                    <button onclick="saveAuto()" id="btn-save-auto" class="btn full btn-accent">Guardar Vehículo en Inventario</button>
+                    <div class="input-group"><label>Dominio</label><input type="text" id="v-dominio"></div>
+                    <div class="input-group"><label>Año</label><input type="number" id="v-anio"></div>
+                    <div class="input-group"><label>Kilómetros</label><input type="number" id="v-km" placeholder="Ej: 120000"></div>
+                    <div class="input-group"><label>GNC</label>
+                        <select id="v-gnc">
+                            <option value="NO">NO</option>
+                            <option value="SI">SI</option>
+                        </select>
+                    </div>
+
+                    <div class="section-divider">Identificación y Legales</div>
+                    <div class="input-group"><label>Chasis</label><input type="text" id="v-vin"></div>
+                    <div class="input-group"><label>Motor</label><input type="text" id="v-motor"></div>
+                    <div class="input-group half"><label>08 Firmado</label>
+                        <select id="v-08">
+                            <option value="NO">NO</option>
+                            <option value="SI">SI</option>
+                        </select>
+                    </div>
+                    <div class="input-group half"><label>Estado de la Unidad</label>
+                        <select id="v-estado">
+                            <option value="LISTO">LISTO PARA VENTA</option>
+                            <option value="ALISTAJE">EN ALISTAJE / TALLER</option>
+                        </select>
+                    </div>
+
+                    <div class="section-divider">Precios</div>
+                    <div class="input-group half"><label>Precio Público ($)</label><input type="number" id="v-precio-pub" placeholder="Precio de lista"></div>
+                    <div class="input-group half"><label>Precio Contado ($)</label><input type="number" id="v-precio-con" placeholder="Precio efectivo"></div>
+
+                    <div class="input-group full">
+                        <label>Características / Detalles (Escrito a mano)</label>
+                        <textarea id="v-caracteristicas" rows="3" placeholder="Ej: Tapizado de cuero, cubiertas nuevas, service oficial..."></textarea>
+                    </div>
+
+                    <button onclick="saveAuto()" id="btn-save-auto" class="btn full btn-accent">Guardar Vehículo en Sistema</button>
                 </div>
             </div>
             <table id="tabla-autos">
-                <thead><tr><th>Vehículo</th><th>Dominio</th><th>Precio</th><th>Acciones</th></tr></thead>
+                <thead><tr><th align="left" style="padding-left:15px">Vehículo / KM</th><th align="left">Dominio / Estado</th><th align="left">Precios (Lista/Contado)</th><th align="right" style="padding-right:15px">Acciones</th></tr></thead>
                 <tbody></tbody>
             </table>
         </section>
 
+        <!-- VISTA CLIENTES -->
         <section id="view-clientes" class="view">
-            <h1>Base de Datos de Clientes</h1>
+            <h1>Base de Clientes</h1>
             <div class="card">
                 <input type="hidden" id="c-index" value="-1">
                 <div class="grid">
-                    <div class="input-group half"><label>Nombre y Apellido / Razón Social</label><input type="text" id="c-nombre"></div>
-                    <div class="input-group half"><label>DNI / CUIT</label><input type="text" id="c-dni"></div>
-                    <div class="input-group"><label>Fecha Nacimiento</label><input type="date" id="c-nac"></div>
-                    <div class="input-group"><label>Estado Civil</label><input type="text" id="c-civil"></div>
-                    <div class="input-group half"><label>Domicilio Legal Completo</label><input type="text" id="c-domicilio"></div>
+                    <div class="input-group half"><label>Nombre / Razón Social</label><input type="text" id="c-nombre"></div>
+                    <div class="input-group half"><label>DNI/CUIT</label><input type="text" id="c-dni"></div>
+                    <div class="input-group half"><label>Domicilio</label><input type="text" id="c-domicilio"></div>
                     <div class="input-group"><label>Teléfono</label><input type="text" id="c-tel"></div>
-                    <div class="input-group"><label>Email</label><input type="email" id="c-email"></div>
-                    <div class="input-group full"><label>Ocupación / Actividad</label><input type="text" id="c-ocupacion"></div>
+                    <div class="input-group"><label>Email</label><input type="text" id="c-email"></div>
                     <button onclick="saveCliente()" id="btn-save-cliente" class="btn full btn-accent">Registrar Cliente</button>
                 </div>
             </div>
             <table id="tabla-clientes">
-                <thead><tr><th>Cliente</th><th>Documento</th><th>Teléfono</th><th>Acciones</th></tr></thead>
+                <thead><tr><th align="left" style="padding-left:15px">Cliente</th><th align="left">Documento</th><th align="left">Teléfono</th><th align="right" style="padding-right:15px">Acciones</th></tr></thead>
                 <tbody></tbody>
             </table>
         </section>
 
+        <!-- VISTA BOLETO -->
         <section id="view-contratos" class="view">
-            <h1>Generar Boleto Compra-Venta Legal</h1>
+            <h1>Boleto Compra-Venta</h1>
             <div class="card">
                 <div class="grid">
-                    <div class="input-group half"><label>Unidad a Vender</label><select id="sel-auto-cv"></select></div>
-                    <div class="input-group half"><label>Comprador</label><select id="sel-cliente-cv"></select></div>
-                    <div class="input-group full">
-                        <label>Detalle de Pago, Permutas y Observaciones Legales</label>
-                        <textarea id="obs-pago-cv" rows="6" placeholder="Ej: Se recibe vehículo marca... dominio... como parte de pago. Saldo en 3 cheques de $..."></textarea>
-                    </div>
-                    <button onclick="generateLegalPDF('cv')" class="btn full">IMPRIMIR BOLETO DE COMPRAVENTA</button>
+                    <div class="input-group half"><label>Seleccionar Unidad</label><select id="sel-auto-cv"></select></div>
+                    <div class="input-group half"><label>Seleccionar Comprador</label><select id="sel-cliente-cv"></select></div>
+                    <div class="input-group full"><label>Observaciones Legales</label><textarea id="obs-pago-cv" rows="4"></textarea></div>
+                    <button onclick="generateLegalPDF('cv')" class="btn full">GENERAR BOLETO PDF</button>
                 </div>
             </div>
         </section>
 
+        <!-- VISTA NOTA DE PEDIDO -->
         <section id="view-nota-pedido" class="view">
-            <h1>Nueva Nota de Pedido</h1>
+            <h1>Nota de Pedido</h1>
             <div class="card">
                 <div class="grid">
-                    <div class="input-group half"><label>Unidad Seleccionada</label><select id="sel-auto-np"></select></div>
-                    <div class="input-group half"><label>Proponente Comprador</label><select id="sel-cliente-np"></select></div>
-                    
-                    <div class="section-divider">Unidad Entregada en Permuta</div>
-                    <div class="input-group"><label>Marca y Modelo</label><input type="text" id="np-p-marca"></div>
-                    <div class="input-group"><label>Dominio</label><input type="text" id="np-p-dominio"></div>
-                    <div class="input-group"><label>Año</label><input type="number" id="np-p-anio"></div>
-                    <div class="input-group"><label>Valor de Toma ($)</label><input type="number" id="np-p-valor" value="0"></div>
-
-                    <div class="section-divider">Liquidación de Gastos de Transferencia</div>
-                    <div class="input-group"><label>Sellado / Inscripción</label><input type="number" id="np-g-insc" value="0"></div>
-                    <div class="input-group"><label>Transferencia</label><input type="number" id="np-g-trans" value="0"></div>
-                    <div class="input-group"><label>Gastos de Otorgamiento</label><input type="number" id="np-g-otor" value="0"></div>
-                    <div class="input-group"><label>Flete y Formularios</label><input type="number" id="np-g-flete" value="0"></div>
-                    
-                    <div class="section-divider">Plan de Pago y Financiación</div>
-                    <div class="input-group"><label>Monto de Reserva</label><input type="number" id="np-f-reserva" value="0"></div>
-                    <div class="input-group"><label>Pago Contado/Refuerzo</label><input type="number" id="np-f-contado" value="0"></div>
-                    <div class="input-group"><label>Saldo a Financiar</label><input type="number" id="np-f-monto" value="0"></div>
-                    <div class="input-group"><label>Cant. Cuotas</label><input type="number" id="np-f-cuotas" value="0"></div>
-                    <div class="input-group"><label>Importe Cuota ($)</label><input type="number" id="np-f-valor-c" value="0"></div>
-                    <div class="input-group"><label>Asesor de Ventas</label><input type="text" id="np-f-vendedor"></div>
-
-                    <button onclick="generateLegalPDF('np')" class="btn full btn-accent">GENERAR NOTA DE PEDIDO PROFESIONAL</button>
+                    <div class="input-group half"><label>Unidad</label><select id="sel-auto-np"></select></div>
+                    <div class="input-group half"><label>Comprador</label><select id="sel-cliente-np"></select></div>
+                    <button onclick="generateLegalPDF('np')" class="btn full btn-accent">GENERAR NOTA DE PEDIDO</button>
                 </div>
             </div>
         </section>
     </main>
 
+    <!-- JS MODULAR -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // CONFIGURACIÓN FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyDCvpjfcF523jCEV7OvJmlkgk7VlLqxgmY",
             authDomain: "cemza-dms.firebaseapp.com",
@@ -177,91 +187,117 @@
             messagingSenderId: "885199998144",
             appId: "1:885199998144:web:e1246a9b6825c0c3cdf125"
         };
-
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
         window.autos = [];
         window.clientes = [];
 
-        onSnapshot(collection(db, "autos"), (snap) => {
-            window.autos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-            window.render();
+        onSnapshot(collection(db, "autos"), (snap) => { 
+            window.autos = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
+            window.render(); 
+        });
+        onSnapshot(collection(db, "clientes"), (snap) => { 
+            window.clientes = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
+            window.render(); 
         });
 
-        onSnapshot(collection(db, "clientes"), (snap) => {
-            window.clientes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-            window.render();
-        });
-
+        // CRUD AUTOS
         window.saveAuto = async () => {
             const id = document.getElementById('v-index').value;
-            const d = {
-                marca: document.getElementById('v-marca').value, modelo: document.getElementById('v-modelo').value,
-                dominio: document.getElementById('v-dominio').value, anio: document.getElementById('v-anio').value,
-                vin: document.getElementById('v-vin').value, motor: document.getElementById('v-motor').value,
-                precio: document.getElementById('v-precio').value
+            const data = {
+                marca: document.getElementById('v-marca').value,
+                modelo: document.getElementById('v-modelo').value,
+                dominio: document.getElementById('v-dominio').value,
+                anio: document.getElementById('v-anio').value,
+                km: document.getElementById('v-km').value,
+                gnc: document.getElementById('v-gnc').value,
+                vin: document.getElementById('v-vin').value,
+                motor: document.getElementById('v-motor').value,
+                firmado08: document.getElementById('v-08').value,
+                estado: document.getElementById('v-estado').value,
+                precioPub: document.getElementById('v-precio-pub').value,
+                precioCon: document.getElementById('v-precio-con').value,
+                caracteristicas: document.getElementById('v-caracteristicas').value
             };
-            if(id === "-1") await addDoc(collection(db, "autos"), d);
-            else await updateDoc(doc(db, "autos", id), d);
-            window.clearInputs('view-autos');
+            
+            try {
+                if(id === "-1") await addDoc(collection(db, "autos"), data);
+                else await updateDoc(doc(db, "autos", id), data);
+                window.clearInputs('view-autos');
+            } catch(e) { console.error("Error al guardar:", e); }
         };
 
         window.saveCliente = async () => {
             const id = document.getElementById('c-index').value;
-            const d = {
+            const data = {
                 nombre: document.getElementById('c-nombre').value, dni: document.getElementById('c-dni').value,
-                nac: document.getElementById('c-nac').value, civil: document.getElementById('c-civil').value,
-                tel: document.getElementById('c-tel').value, email: document.getElementById('c-email').value,
-                domicilio: document.getElementById('c-domicilio').value, ocupacion: document.getElementById('c-ocupacion').value
+                domicilio: document.getElementById('c-domicilio').value, tel: document.getElementById('c-tel').value,
+                email: document.getElementById('c-email').value
             };
-            if(id === "-1") await addDoc(collection(db, "clientes"), d);
-            else await updateDoc(doc(db, "clientes", id), d);
+            if(id === "-1") await addDoc(collection(db, "clientes"), data);
+            else await updateDoc(doc(db, "clientes", id), data);
             window.clearInputs('view-clientes');
         };
 
-        window.deleteAuto = async (id) => { if(confirm('¿Eliminar?')) await deleteDoc(doc(db, "autos", id)); };
-        window.deleteCliente = async (id) => { if(confirm('¿Eliminar?')) await deleteDoc(doc(db, "clientes", id)); };
+        window.deleteAuto = async (id) => { if(confirm('¿Eliminar unidad del inventario?')) await deleteDoc(doc(db, "autos", id)); };
+        window.deleteCliente = async (id) => { if(confirm('¿Eliminar cliente?')) await deleteDoc(doc(db, "clientes", id)); };
 
+        // UI & RENDERING
         window.switchView = (id, el) => {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            el.classList.add('active');
+            document.getElementById(id).classList.add('active'); el.classList.add('active');
         };
 
         window.render = () => {
-            const ta = document.querySelector('#tabla-autos tbody');
-            const tc = document.querySelector('#tabla-clientes tbody');
-            if(ta) ta.innerHTML = window.autos.map((a, i) => `
-                <tr>
-                    <td><b>${a.marca} ${a.modelo}</b><br><small>${a.anio}</small></td>
-                    <td>${a.dominio}</td>
-                    <td>$${Number(a.precio).toLocaleString()}</td>
-                    <td class="action-btns">
-                        <button class="btn-small btn-edit" onclick="editAuto(${i})">Editar</button>
-                        <button class="btn-small btn-del" onclick="deleteAuto('${a.id}')">Borrar</button>
+            const tAutos = document.querySelector('#tabla-autos tbody');
+            const tClientes = document.querySelector('#tabla-clientes tbody');
+            
+            if(tAutos) tAutos.innerHTML = window.autos.map((a, i) => {
+                const isAlistaje = a.estado === 'ALISTAJE';
+                const estadoBadge = isAlistaje ? '<span class="badge bg-red">ALISTAJE</span>' : '<span class="badge bg-green">LISTO</span>';
+                
+                return `
+                <tr class="${isAlistaje ? 'alistaje' : ''}">
+                    <td>
+                        <b>${a.marca} ${a.modelo}</b> <span class="badge bg-gray">${a.anio}</span><br>
+                        <small style="color:var(--text-light)">${Number(a.km).toLocaleString()} KM | GNC: ${a.gnc}</small>
                     </td>
-                </tr>`).join('');
-            if(tc) tc.innerHTML = window.clientes.map((c, i) => `
+                    <td>${a.dominio} ${estadoBadge}<br><span class="badge bg-blue">08: ${a.firmado08}</span></td>
+                    <td>
+                        <span style="font-weight:bold; color:var(--accent)">P: $${Number(a.precioPub).toLocaleString()}</span><br>
+                        <span style="font-size:12px; color:var(--success)">C: $${Number(a.precioCon).toLocaleString()}</span>
+                    </td>
+                    <td align="right">
+                        <button class="btn-small" onclick="editAuto(${i})">Editar</button>
+                        <button class="btn-small" style="color:var(--danger)" onclick="deleteAuto('${a.id}')">Borrar</button>
+                    </td>
+                </tr>`;
+            }).join('');
+
+            if(tClientes) tClientes.innerHTML = window.clientes.map((c, i) => `
                 <tr>
                     <td><b>${c.nombre}</b></td>
                     <td>${c.dni}</td>
                     <td>${c.tel}</td>
-                    <td class="action-btns">
-                        <button class="btn-small btn-edit" onclick="editCliente(${i})">Editar</button>
-                        <button class="btn-small btn-del" onclick="deleteCliente('${c.id}')">Borrar</button>
+                    <td align="right">
+                        <button class="btn-small" onclick="editCliente(${i})">Editar</button>
+                        <button class="btn-small" style="color:var(--danger)" onclick="deleteCliente('${c.id}')">Borrar</button>
                     </td>
                 </tr>`).join('');
+            
             window.updateSelects();
         };
 
         window.updateSelects = () => {
             const optA = window.autos.map((a,i) => `<option value="${i}">${a.marca} ${a.modelo} (${a.dominio})</option>`).join('');
-            const optC = window.clientes.map((c,i) => `<option value="${i}">${c.nombre} - ${c.dni}</option>`).join('');
+            const optC = window.clientes.map((c,i) => `<option value="${i}">${c.nombre}</option>`).join('');
             ['cv', 'np'].forEach(t => {
-                document.getElementById(`sel-auto-${t}`).innerHTML = optA;
-                document.getElementById(`sel-cliente-${t}`).innerHTML = optC;
+                const sA = document.getElementById(`sel-auto-${t}`);
+                const sC = document.getElementById(`sel-cliente-${t}`);
+                if(sA) sA.innerHTML = optA;
+                if(sC) sC.innerHTML = optC;
             });
         };
 
@@ -271,213 +307,85 @@
             document.getElementById('v-modelo').value = a.modelo;
             document.getElementById('v-dominio').value = a.dominio;
             document.getElementById('v-anio').value = a.anio;
+            document.getElementById('v-km').value = a.km || 0;
+            document.getElementById('v-gnc').value = a.gnc || 'NO';
             document.getElementById('v-vin').value = a.vin;
             document.getElementById('v-motor').value = a.motor;
-            document.getElementById('v-precio').value = a.precio;
+            document.getElementById('v-08').value = a.firmado08 || 'NO';
+            document.getElementById('v-estado').value = a.estado || 'LISTO';
+            document.getElementById('v-precio-pub').value = a.precioPub || 0;
+            document.getElementById('v-precio-con').value = a.precioCon || 0;
+            document.getElementById('v-caracteristicas').value = a.caracteristicas || '';
             document.getElementById('v-index').value = a.id;
             document.getElementById('btn-save-auto').innerText = "Actualizar Vehículo";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         window.editCliente = (i) => {
             const c = window.clientes[i];
-            document.getElementById('c-nombre').value = c.nombre;
+            document.getElementById('c-nombre').value = c.nombre; 
             document.getElementById('c-dni').value = c.dni;
-            document.getElementById('c-nac').value = c.nac;
-            document.getElementById('c-civil').value = c.civil;
+            document.getElementById('c-domicilio').value = c.domicilio; 
             document.getElementById('c-tel').value = c.tel;
-            document.getElementById('c-email').value = c.email;
-            document.getElementById('c-domicilio').value = c.domicilio;
-            document.getElementById('c-ocupacion').value = c.ocupacion;
+            document.getElementById('c-email').value = c.email; 
             document.getElementById('c-index').value = c.id;
             document.getElementById('btn-save-cliente').innerText = "Actualizar Cliente";
         };
 
-        window.clearInputs = (v) => {
-            document.querySelectorAll(`#${v} input`).forEach(i => i.value = '');
-            document.querySelectorAll(`#${v} textarea`).forEach(i => i.value = '');
-            document.getElementById('v-index').value = "-1";
+        window.clearInputs = (v) => { 
+            document.querySelectorAll(`#${v} input`).forEach(i => i.value = ''); 
+            document.querySelectorAll(`#${v} textarea`).forEach(i => i.value = ''); 
+            document.getElementById('v-index').value = "-1"; 
             document.getElementById('c-index').value = "-1";
-            document.getElementById('btn-save-auto').innerText = "Guardar Vehículo en Inventario";
+            document.getElementById('btn-save-auto').innerText = "Guardar Vehículo en Sistema";
             document.getElementById('btn-save-cliente').innerText = "Registrar Cliente";
         };
 
-        // --- MOTOR DE PDF CON CLÁUSULAS COMPLETAS ---
         window.generateLegalPDF = (type) => {
-            const a = window.autos[document.getElementById(`sel-auto-${type}`).value];
-            const c = window.clientes[document.getElementById(`sel-cliente-${type}`).value];
-            if(!a || !c) return alert('Seleccione datos');
+            const auto = window.autos[document.getElementById(`sel-auto-${type}`).value];
+            const cliente = window.clientes[document.getElementById(`sel-cliente-${type}`).value];
+            if(!auto || !cliente) return alert('Seleccione datos primero');
 
             const win = window.open('', '_blank');
-            let content = "";
+            let docHTML = "";
 
             if(type === 'cv') {
                 const obs = document.getElementById('obs-pago-cv').value;
-                content = `
-                    <div class="doc-header">BOLETO DE COMPRAVENTA AUTOMOTOR</div>
-                    <p class="txt">Entre <b>CEMZA AUTOMOTORES</b> con domicilio en Cacique quinza 25 de Embalse, Córdoba, en adelante "EL VENDEDOR", y <b>${c.nombre.toUpperCase()}</b> DNI/CUIT Nº ${c.dni} con domicilio en ${c.domicilio}, en adelante "EL COMPRADOR", se acuerda lo siguiente:</p>
-                    
-                    <div class="st">PRIMERA: OBJETO</div>
-                    <p class="txt">El Vendedor vende al Comprador y este acepta la unidad usada detallada:</p>
-                    <div class="box"><b>Vehículo:</b> ${a.marca} ${a.modelo} | <b>Dominio:</b> ${a.dominio} | <b>Año:</b> ${a.anio}<br><b>Motor:</b> ${a.motor} | <b>Chasis:</b> ${a.vin}</div>
-
-                    <div class="st">SEGUNDA: PRECIO Y PAGO</div>
-                    <p class="txt">El precio total se fija en $${Number(a.precio).toLocaleString()}.</p>
-                    <div class="box"><b>Condiciones:</b> ${obs || 'Contado efectivo en este acto.'}</div>
-
-                    <div class="st">TERCERA: ESTADO Y VICIOS</div>
-                    <p class="txt">El Comprador acepta la unidad en el estado en que se encuentra, habiéndola revisado a su entera satisfacción, renunciando a reclamos por vicios redhibitorios posteriores.</p>
-
-                    <div class="st">CUARTA: TRANSFERENCIA</div>
-                    <p class="txt">La transferencia se realizará en un plazo de 10 días. El Comprador es responsable de los gastos de la misma.</p>
-
-                    <div class="st">QUINTA: RESPONSABILIDAD CIVIL Y PENAL</div>
-                    <p class="txt">A partir de la entrega de la unidad, el Comprador asume la total responsabilidad civil, penal y tributaria por el uso del vehículo, liberando al Vendedor de cualquier reclamo por accidentes, infracciones o daños a terceros. El Vendedor asume las deudas anteriores a la fecha.</p>
-
-                    <div class="st">SEXTA: JURISDICCIÓN</div>
-                    <p class="txt">Las partes se someten a los Tribunales Ordinarios de la Provincia de Córdoba, renunciando a cualquier otro fuero.</p>
-                `;
-            } else {
-                const g = {
-                    ins: Number(document.getElementById('np-g-insc').value), tr: Number(document.getElementById('np-g-trans').value),
-                    ot: Number(document.getElementById('np-g-otor').value), fl: Number(document.getElementById('np-g-flete').value)
-                };
-                const f = {
-                    res: Number(document.getElementById('np-f-reserva').value), con: Number(document.getElementById('np-f-contado').value),
-                    mon: Number(document.getElementById('np-f-monto').value), cuo: document.getElementById('np-f-cuotas').value,
-                    vcuo: document.getElementById('np-f-valor-c').value, vend: document.getElementById('np-f-vendedor').value
-                };
-                const p = {
-                    m: document.getElementById('np-p-marca').value, d: document.getElementById('np-p-dominio').value,
-                    a: document.getElementById('np-p-anio').value, v: Number(document.getElementById('np-p-valor').value)
-                };
-
-                content = `
-                    <div class="doc-header">NOTA DE PEDIDO DE UNIDAD</div>
-                    <div class="st">1. PROPONENTE</div>
-                    <div class="box"><b>Nombre:</b> ${c.nombre} | <b>Documento:</b> ${c.dni}<br><b>Domicilio:</b> ${c.domicilio} | <b>Tel:</b> ${c.tel}</div>
-                    
-                    <div class="st">2. UNIDAD SOLICITADA</div>
-                    <div class="box"><b>Modelo:</b> ${a.marca} ${a.modelo} | <b>Año:</b> ${a.anio}<br><b>Precio Lista:</b> $${Number(a.precio).toLocaleString()}</div>
-
-                    <div class="st">3. UNIDAD EN PERMUTA</div>
-                    <div class="box"><b>Modelo:</b> ${p.m || 'N/A'} | <b>Dominio:</b> ${p.d || 'N/A'} | <b>Año:</b> ${p.a || 'N/A'}<br><b>Valor de Toma:</b> $${p.v.toLocaleString()}</div>
-
-                    <div class="st">4. LIQUIDACIÓN DE GASTOS</div>
-                    <table style="width:100%; font-size:10px; border-collapse:collapse">
-                        <tr><td style="border-bottom:1px solid #ddd; padding:5px">Sellado e Inscripción</td><td align="right">$${g.ins.toLocaleString()}</td></tr>
-                        <tr><td style="border-bottom:1px solid #ddd; padding:5px">Transferencia de Dominio</td><td align="right">$${g.tr.toLocaleString()}</td></tr>
-                        <tr><td style="border-bottom:1px solid #ddd; padding:5px">Gestoría y Formularios</td><td align="right">$${(g.ot+g.fl).toLocaleString()}</td></tr>
-                        <tr style="font-weight:bold"><td>TOTAL GASTOS</td><td align="right">$${(g.ins+g.tr+g.ot+g.fl).toLocaleString()}</td></tr>
-                    </table>
-
-                    <div class="st">5. CONDICIONES FINANCIERAS</div>
-                    <div class="box">
-                        <b>Reserva:</b> $${f.res.toLocaleString()} | <b>Efectivo:</b> $${f.con.toLocaleString()}<br>
-                        <b>Saldo a Financiar:</b> $${f.mon.toLocaleString()} en <b>${f.cuo} cuotas de $${f.vcuo}</b>
+                docHTML = `<h1>BOLETO DE COMPRAVENTA</h1>
+                    <p>En la ciudad de Embalse, se acuerda la venta del vehículo <b>${auto.marca} ${auto.modelo}</b>, Dominio <b>${auto.dominio}</b>, Año <b>${auto.anio}</b>.</p>
+                    <p><b>MOTOR:</b> ${auto.motor} | <b>CHASIS:</b> ${auto.vin} | <b>KM:</b> ${Number(auto.km).toLocaleString()}</p>
+                    <p><b>VENDEDOR:</b> CEMZA AUTOMOTORES</p>
+                    <p><b>COMPRADOR:</b> ${cliente.nombre} | DNI: ${cliente.dni}</p>
+                    <div style="background:#f8fafc; padding:20px; border:1px solid #e2e8f0; border-radius:10px; margin:20px 0;">
+                        <b>PRECIO DE OPERACIÓN: $${Number(auto.precioCon).toLocaleString()}</b><br>
+                        <b>FORMA DE PAGO Y DETALLES:</b> ${obs || 'Contado efectivo.'}
                     </div>
-                    <p style="font-size:10px; margin-top:10px"><b>Vendedor:</b> ${f.vend}</p>
-                `;
+                    <p style="font-size:12px; color:#64748b">Características adicionales: ${auto.caracteristicas || 'Ninguna'}</p>`;
+            } else {
+                docHTML = `<h1>NOTA DE PEDIDO</h1>
+                    <p><b>CLIENTE:</b> ${cliente.nombre} | <b>DNI:</b> ${cliente.dni}</p>
+                    <p><b>UNIDAD SOLICITADA:</b> ${auto.marca} ${auto.modelo} (${auto.dominio})</p>
+                    <hr>
+                    <p><b>CARACTERÍSTICAS DEL VEHÍCULO:</b><br>${auto.caracteristicas || 'Estándar según modelo.'}</p>
+                    <p><b>PRECIO DE LISTA:</b> $${Number(auto.precioPub).toLocaleString()}</p>`;
             }
 
-win.document.write(`
-<html>
-<head>
-<style>
-    body {
-        font-family: Arial, Helvetica, sans-serif;
-        padding: 50px;
-        color: #1e293b;
-        line-height: 1.6;
-        background: #ffffff;
-    }
-
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 2px solid #e2e8f0;
-        padding-bottom: 12px;
-        margin-bottom: 25px;
-    }
-
-    .brand {
-        font-size: 22px;
-        font-weight: bold;
-    }
-
-    .brand span {
-        color: #2563eb;
-    }
-
-    .doc-header {
-        text-align: center;
-        font-size: 18px;
-        font-weight: bold;
-        margin: 25px 0;
-    }
-
-    .st {
-        margin-top: 20px;
-        font-size: 12px;
-        font-weight: bold;
-        color: #2563eb;
-    }
-
-    .txt {
-        font-size: 11px;
-        text-align: justify;
-        margin-top: 6px;
-    }
-
-    .box {
-        border: 1px solid #e2e8f0;
-        padding: 12px;
-        font-size: 11px;
-        margin-top: 8px;
-        background: #f8fafc;
-    }
-
-    .sigs {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 70px;
-    }
-
-    .sig-box {
-        width: 220px;
-        text-align: center;
-        font-size: 10px;
-    }
-
-    .sig-line {
-        border-top: 1px solid #000;
-        margin-bottom: 5px;
-    }
-</style>
-</head>
-
-<body onload="window.print()">
-
-    <div class="header">
-        <div class="brand">CEMZA <span>AUTOMOTORES</span></div>
-        <div style="font-size:11px; color:#64748b;">Documento generado digitalmente</div>
-    </div>
-
-    ${content}
-
-    <div class="sigs">
-        <div class="sig-box">
-            <div class="sig-line"></div>
-            FIRMA COMPRADOR
-        </div>
-        <div class="sig-box">
-            <div class="sig-line"></div>
-            CEMZA AUTOMOTORES
-        </div>
-    </div>
-
-</body>
-</html>
+            win.document.write(`
+                <html><head><style>
+                    body { font-family: sans-serif; padding: 50px; color: #0f172a; line-height: 1.6; }
+                    h1 { border-bottom: 4px solid #2563eb; padding-bottom: 10px; text-align: center; }
+                    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 1px solid #ddd; padding-bottom: 20px; }
+                    .footer { margin-top: 100px; display: flex; justify-content: space-between; }
+                    .sig { border-top: 1px solid #000; width: 220px; text-align: center; padding-top: 10px; font-size: 12px; }
+                </style></head>
+                <body onload="window.print()">
+                    <div class="header">
+                        <div style="font-size: 26px; font-weight: 900;">CEMZA <span style="color:#2563eb">AUTOMOTORES</span></div>
+                        <div style="text-align:right; font-size:10px; color:#64748b;">Embalse, Córdoba<br>Documento de Gestión Interna</div>
+                    </div>
+                    ${docHTML}
+                    <div class="footer"><div class="sig">FIRMA COMPRADOR<br>DNI: ${cliente.dni}</div><div class="sig">CEMZA AUTOMOTORES<br>Sello y Firma</div></div>
+                </body></html>
             `);
             win.document.close();
         };
