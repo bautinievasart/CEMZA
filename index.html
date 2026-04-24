@@ -160,14 +160,30 @@
             </div>
         </section>
 
-        <!-- VISTA NOTA DE PEDIDO -->
+        <!-- VISTA NOTA DE PEDIDO (RESTAURADA) -->
         <section id="view-nota-pedido" class="view">
             <h1>Nota de Pedido</h1>
             <div class="card">
                 <div class="grid">
+                    <div class="section-divider">Selección de Operación</div>
                     <div class="input-group half"><label>Unidad</label><select id="sel-auto-np"></select></div>
                     <div class="input-group half"><label>Comprador</label><select id="sel-cliente-np"></select></div>
-                    <button onclick="generateLegalPDF('np')" class="btn full btn-accent">GENERAR NOTA DE PEDIDO</button>
+                    
+                    <div class="section-divider">Detalles del Pago</div>
+                    <div class="input-group half"><label>Precio de Venta ($)</label><input type="number" id="np-precio-venta"></div>
+                    <div class="input-group half"><label>Entrega Efectivo ($)</label><input type="number" id="np-entrega-efectivo"></div>
+                    
+                    <div class="section-divider">Vehículo Usado (Si aplica)</div>
+                    <div class="input-group"><label>Marca/Modelo Usado</label><input type="text" id="np-usado-nombre"></div>
+                    <div class="input-group"><label>Dominio Usado</label><input type="text" id="np-usado-dominio"></div>
+                    <div class="input-group"><label>Año Usado</label><input type="number" id="np-usado-anio"></div>
+                    <div class="input-group"><label>Valor Tomado ($)</label><input type="number" id="np-usado-valor"></div>
+                    
+                    <div class="section-divider">Cierre</div>
+                    <div class="input-group half"><label>Saldo Restante ($)</label><input type="number" id="np-saldo"></div>
+                    <div class="input-group half"><label>Fecha de Entrega aprox.</label><input type="date" id="np-fecha-entrega"></div>
+
+                    <button onclick="generateLegalPDF('np')" class="btn full btn-accent">GENERAR NOTA DE PEDIDO PDF</button>
                 </div>
             </div>
         </section>
@@ -342,8 +358,12 @@
         };
 
         window.generateLegalPDF = (type) => {
-            const auto = window.autos[document.getElementById(`sel-auto-${type}`).value];
-            const cliente = window.clientes[document.getElementById(`sel-cliente-${type}`).value];
+            const autoIndex = document.getElementById(`sel-auto-${type}`).value;
+            const clienteIndex = document.getElementById(`sel-cliente-${type}`).value;
+            
+            const auto = window.autos[autoIndex];
+            const cliente = window.clientes[clienteIndex];
+            
             if(!auto || !cliente) return alert('Seleccione datos primero');
 
             const win = window.open('', '_blank');
@@ -362,12 +382,31 @@
                     </div>
                     <p style="font-size:12px; color:#64748b">Características adicionales: ${auto.caracteristicas || 'Ninguna'}</p>`;
             } else {
+                // Datos específicos de Nota de Pedido
+                const precioVenta = document.getElementById('np-precio-venta').value;
+                const entregaEf = document.getElementById('np-entrega-efectivo').value;
+                const usadoNombre = document.getElementById('np-usado-nombre').value;
+                const usadoDom = document.getElementById('np-usado-dominio').value;
+                const usadoVal = document.getElementById('np-usado-valor').value;
+                const saldo = document.getElementById('np-saldo').value;
+                const fecha = document.getElementById('np-fecha-entrega').value;
+
                 docHTML = `<h1>NOTA DE PEDIDO</h1>
+                    <p><b>FECHA:</b> ${new Date().toLocaleDateString()}</p>
                     <p><b>CLIENTE:</b> ${cliente.nombre} | <b>DNI:</b> ${cliente.dni}</p>
                     <p><b>UNIDAD SOLICITADA:</b> ${auto.marca} ${auto.modelo} (${auto.dominio})</p>
-                    <hr>
+                    
+                    <div style="background:#f8fafc; padding:20px; border:1px solid #e2e8f0; border-radius:10px; margin:20px 0;">
+                        <h3 style="margin-top:0">RESUMEN DE OPERACIÓN</h3>
+                        <p>PRECIO DE VENTA: <b>$${Number(precioVenta).toLocaleString()}</b></p>
+                        <p>ENTREGA EFECTIVO: <b>$${Number(entregaEf).toLocaleString()}</b></p>
+                        ${usadoNombre ? `<p>TOMA DE USADO: <b>${usadoNombre} (${usadoDom}) - $${Number(usadoVal).toLocaleString()}</b></p>` : ''}
+                        <p style="border-top:2px solid #2563eb; padding-top:10px; font-size:18px">SALDO RESTANTE: <b>$${Number(saldo).toLocaleString()}</b></p>
+                        <p>FECHA PROBABLE ENTREGA: <b>${fecha}</b></p>
+                    </div>
+
                     <p><b>CARACTERÍSTICAS DEL VEHÍCULO:</b><br>${auto.caracteristicas || 'Estándar según modelo.'}</p>
-                    <p><b>PRECIO DE LISTA:</b> $${Number(auto.precioPub).toLocaleString()}</p>`;
+                    <p style="font-size:11px; color:#64748b; margin-top:30px">La presente nota de pedido constituye una reserva ad-referendum de la aceptación de la agencia y disponibilidad de la unidad.</p>`;
             }
 
             win.document.write(`
@@ -377,6 +416,7 @@
                     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 1px solid #ddd; padding-bottom: 20px; }
                     .footer { margin-top: 100px; display: flex; justify-content: space-between; }
                     .sig { border-top: 1px solid #000; width: 220px; text-align: center; padding-top: 10px; font-size: 12px; }
+                    h3 { color: #2563eb; }
                 </style></head>
                 <body onload="window.print()">
                     <div class="header">
