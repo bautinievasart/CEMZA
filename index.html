@@ -1685,13 +1685,11 @@ window.generarReciboPDF = () => {
             <td>$${it.monto.toLocaleString('es-AR')}</td>
         </tr>`).join('');
 
-    win.document.write(`<html><head>${DS}</head><body>
+   win.document.write(`<html><head>${DS}</head><body>
         <button onclick="window.print()" class="np">Imprimir</button>
-        <img class="wm" src="${window.LOGO_IMG}" alt="">
+        
         <div class="hdr">
-            <img src="${window.LOGO_IMG}" style="height:58px;object-fit:contain;mix-blend-mode:screen;">
-            <div style="text-align:center;flex:1;">
-                <h1>DETALLE DE <span class="brand">PAGO</span></h1>
+            <div style="text-align:left; flex:1;"> <h1>DETALLE DE <span class="brand">PAGO</span></h1>
                 <div style="font-size:9px;color:#64748b;">Comprobante Interno</div>
             </div>
             
