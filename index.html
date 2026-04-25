@@ -1731,13 +1731,13 @@ window.generarReciboPDF = () => {
     </body></html>\`);
     win.document.close();
 };
-function toggleVtvDate(prefix){
+window.toggleVtvDate = function(prefix){
     const chk = document.getElementById(prefix+'-verif');
     const grp = document.getElementById(prefix+'-vtv-vto-group');
     if(grp) grp.style.display = chk&&chk.checked ? '' : 'none';
     if(chk&&!chk.checked){ const f=document.getElementById(prefix+'-vtv-vto'); if(f) f.value=''; }
 }
-function toggleGncDates(prefix){
+window.toggleGncDates = function(prefix){
     const chk = document.getElementById(prefix+'-gnc');
     const show = chk&&chk.checked;
     ['gnc-tubo-group','gnc-oblea-group'].forEach(s=>{
@@ -1747,13 +1747,23 @@ function toggleGncDates(prefix){
         ['gnc-tubo','gnc-oblea'].forEach(s=>{ const f=document.getElementById(prefix+'-'+s); if(f) f.value=''; });
     }
 }
-function switchView(id,el){
+window.switchView = function(id,el){
     document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    el.classList.add('active');
+    if(el) el.classList.add('active');
+    // Sync bottom nav
+    document.querySelectorAll('.bn-item').forEach(b=>b.classList.remove('active'));
+    const _bnMap = {
+        'view-dashboard':'bn-dashboard','view-autos':'bn-autos','view-clientes':'bn-clientes',
+        'view-boleto':'bn-boleto','view-nota-pedido':'bn-nota',
+        'view-peritaje':'bn-peritaje','view-ventas':'bn-ventas','view-recibos':'bn-recibos','view-empleados':'bn-empleados'
+    };
+    const _bn = document.getElementById(_bnMap[id]);
+    if(_bn) _bn.classList.add('active');
+    if(window.innerWidth <= 768) window.closeSidebar && window.closeSidebar();
 }
-function drawPagares(){
+window.drawPagares = function(){
     const cant=Math.max(0,Number(document.getElementById('np-pg-cant').value)||0);
     const c=document.getElementById('pagares-container');
     if(cant>c.children.length){
@@ -1764,7 +1774,7 @@ function drawPagares(){
         }
     } else { while(c.children.length>cant) c.removeChild(c.lastChild); }
 }
-function togglePermuta(){
+window.togglePermuta = function(){
     document.getElementById('permuta-section').style.display =
         document.getElementById('np-permuta-toggle').checked ? 'block' : 'none';
 }
@@ -1784,7 +1794,7 @@ const PERITAJE=[
 
 function slug(s){ return s.toLowerCase().replace(/[^a-z0-9]/g,'_'); }
 
-function buildChecklist(){
+window.buildChecklist = function(){
     const cont=document.getElementById('peritaje-checklist');
     let h='';
     PERITAJE.forEach(sec=>{
@@ -1844,7 +1854,7 @@ window.savePeritaje = async () => {
     finally { btn.disabled=false; btn.textContent='GUARDAR EN HISTORIAL'; }
 };
 
-function generatePeritajePDF(){
+window.generatePeritajePDF = function(){
     const marca=document.getElementById('per-marca').value.trim();
     if(!marca){ alert('Ingresá la Marca del vehículo.'); return; }
     const win=window.open('','_blank');
@@ -1987,21 +1997,7 @@ function toggleSidebarCollapse(){
 })();
 
 // Sincronizar bottom nav con switchView
-const _origSwitch = window.switchView;
-window.switchView = function(id, el){
-    _origSwitch(id, el);
-    // Actualizar bottom nav
-    document.querySelectorAll('.bn-item').forEach(b=>b.classList.remove('active'));
-    const map = {
-        'view-dashboard':'bn-dashboard','view-autos':'bn-autos','view-clientes':'bn-clientes',
-        'view-boleto':'bn-boleto','view-nota-pedido':'bn-nota',
-        'view-peritaje':'bn-peritaje','view-ventas':'bn-ventas','view-recibos':'bn-recibos','view-empleados':'bn-empleados'
-    };
-    const bn = document.getElementById(map[id]);
-    if(bn) bn.classList.add('active');
-    // Cerrar sidebar en mobile al navegar
-    if(window.innerWidth <= 768) closeSidebar();
-};
+// switchView is defined in module with bottom nav logic
 </script>
 </body>
 </html>
