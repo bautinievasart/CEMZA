@@ -455,7 +455,7 @@
             <div class="input-group"><label>Precio Público ($)</label><input type="number" id="v-precio-pub" placeholder="Publicado"></div>
             <div class="input-group"><label>Precio Info ($)</label><input type="number" id="v-precio-info" placeholder="Interno"></div>
             <div class="input-group"><label>Precio Contado ($)</label><input type="number" id="v-precio-cont" placeholder="Al contado"></div>
-            <div class="input-group"><label>Precio de Venta ($)</label><input type="number" id="v-precio" placeholder="Operación final"></div>
+            
 
             <div class="section-divider">Documentación y Extras</div>
             <div class="input-group half"><label>Tipo de Combustible</label>
@@ -472,8 +472,8 @@
             <div class="input-group half"></div>
             <div class="checkbox-group"><input type="checkbox" id="v-08"><label>08 Firmado</label></div>
             <div class="input-group"><label>Vencimiento 08</label><input type="date" id="v-08-vto"></div>
-            <div class="checkbox-group"><input type="checkbox" id="v-verif" onchange="toggleVtvDate('v')"><label>Verificado / VTV</label></div>
-            <div class="input-group" id="v-vtv-vto-group" style="display:none"><label>Vencimiento VTV</label><input type="date" id="v-vtv-vto"></div>
+            <div class="checkbox-group"><input type="checkbox" id="v-verif" onchange="toggleVtvDate('v')"><label>Verificado</label></div>
+            <div class="input-group" id="v-vtv-vto-group" style="display:none"><label>Vencimiento</label><input type="date" id="v-vto"></div>
             <div class="input-group"></div>
             <div class="checkbox-group"><input type="checkbox" id="v-gnc" onchange="toggleGncDates('v')"><label>GNC</label></div>
             <div class="input-group" id="v-gnc-tubo-group" style="display:none"><label>Venc. Tubo GNC</label><input type="date" id="v-gnc-tubo"></div>
@@ -611,8 +611,8 @@
             </div>
 
             <div class="section-divider">Liquidación de Gastos</div>
-            <div class="input-group"><label>Gasto Inscripción</label><input type="number" class="gasto-calc" id="g-ins"></div>
-            <div class="input-group"><label>Gastos Transferencia</label><input type="number" class="gasto-calc" id="g-tra"></div>
+            <div class="input-group"><label>Gasto Inscripción (0km)</label><input type="number" class="gasto-calc" id="g-ins"></div>
+            <div class="input-group"><label>Gastos Transferencia (Usados y 0km patentados)</label><input type="number" class="gasto-calc" id="g-tra"></div>
             <div class="input-group"><label>Gastos Prendarios</label><input type="number" class="gasto-calc" id="g-pre"></div>
             <div class="input-group"><label>Gastos Otorgamiento</label><input type="number" class="gasto-calc" id="g-oto"></div>
             <div class="input-group"><label>Flete y Formularios</label><input type="number" class="gasto-calc" id="g-fle"></div>
