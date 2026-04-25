@@ -1689,7 +1689,8 @@ window.generarReciboPDF = () => {
         <button onclick="window.print()" class="np">Imprimir</button>
         
         <div class="hdr">
-            <div style="text-align:left; flex:1;"> <h1>DETALLE DE <span class="brand">PAGO</span></h1>
+            <div style="text-align:left;flex:1;padding-top:10px;">
+                <h1>DETALLE DE <span class="brand">PAGO</span></h1>
                 <div style="font-size:9px;color:#64748b;">Comprobante Interno</div>
             </div>
             
@@ -1732,7 +1733,7 @@ window.generarReciboPDF = () => {
             </div>
             <div class="firm-box">
                 <div class="firm-line"></div>
-                <div class="firm-lbl">CEMZA Automotores S.A.</div>
+                <div class="firm-lbl">MANDATARIA NACIONAL</div>
                 <div class="firm-sub">Operador: ${esc(f('rc-operador'))}</div>
             </div>
         </div>
