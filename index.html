@@ -1685,56 +1685,62 @@ window.generarReciboPDF = () => {
             <td>$${it.monto.toLocaleString('es-AR')}</td>
         </tr>`).join('');
 
-   win.document.write(`<html><head>${DS}</head><body>
+  win.document.write(`<html><head>${DS}
+    <style>
+        /* Forzamos que no aparezca ninguna imagen de logo o marca de agua */
+        .wm, .hdr img, img[src*="logo"] { display: none !important; }
+        .hdr { padding-top: 10px; border-bottom: 2px solid #3b82f6; padding-bottom: 10px; }
+    </style>
+ </head><body>
         <button onclick="window.print()" class="np">Imprimir</button>
         
         <div class="hdr">
-            <div style="text-align:left;flex:1;padding-top:10px;">
-                <h1>DETALLE DE <span class="brand">PAGO</span></h1>
-                <div style="font-size:9px;color:#64748b;">Comprobante Interno</div>
+            <div style="text-align:left; flex:1;">
+                <h1 style="margin:0; font-size:24px;">DETALLE DE <span class="brand" style="color:#3b82f6;">PAGO</span></h1>
+                <div style="font-size:10px; color:#64748b; font-weight:600;">Comprobante Interno</div>
             </div>
             
-            <div style="text-align:right;font-size:9px;line-height:1.4;color:#374151;">
-                <div style="font-weight:700;color:#0d1117;font-size:10px;">MANDATARIA NACIONAL</div>
+            <div style="text-align:right; font-size:9px; line-height:1.4; color:#374151;">
+                <div style="font-weight:700; color:#0d1117; font-size:10px;">MANDATARIA NACIONAL</div>
                 <div>Mat. M202027352343566DN</div>
                 <div>03571 - 15525028</div>
                 <div>angybanti@gmail.com</div>
                 <div>Malvinas Argentinas 290</div>
                 <div>Embalse, Córdoba</div>
-                <div style="margin-top:4px;font-weight:600;color:#0d1117;font-size:10px;">Nº ${recibo_num} · ${esc(fecha)}</div>
+                <div style="margin-top:4px; font-weight:700; color:#0d1117; font-size:10px;">Nº ${recibo_num} · ${esc(fecha)}</div>
             </div>
         </div>
 
-        <div class="info-grid">
+        <div class="info-grid" style="margin-top:20px;">
             <div class="ib"><b>Recibí de</b><span>${esc(f('rc-de'))}</span></div>
             <div class="ib"><b>DNI / CUIT</b><span>${esc(f('rc-dni'))}</span></div>
             <div class="ib"><b>Concepto</b><span>${esc(f('rc-concepto'))}</span></div>
             <div class="ib"><b>Forma de Pago</b><span>${esc(f('rc-forma'))}</span></div>
         </div>
 
-        <div class="sh">Desglose de Importes</div>
-        <table class="items-table">
-            <thead><tr><th>#</th><th>Descripción</th><th style="text-align:right;">Importe</th></tr></thead>
-            <tbody>${itemsHTML}</tbody>
+        <div class="sh" style="margin-top:20px; font-weight:700; text-transform:uppercase; font-size:10px; color:#3b82f6; border-bottom:1px solid #e5e7eb;">Desglose de Importes</div>
+        <table class="items-table" style="width:100%; margin-top:10px; border-collapse:collapse;">
+            <thead><tr style="background:#f8fafc;"><th style="text-align:left; padding:8px;">#</th><th style="text-align:left; padding:8px;">Descripción</th><th style="text-align:right; padding:8px;">Importe</th></tr></thead>
+            <tbody style="font-size:11px;">${itemsHTML}</tbody>
         </table>
 
-        <div class="total-row">
-            <h2>TOTAL ABONADO</h2>
-            <h2>$${total.toLocaleString('es-AR')}</h2>
+        <div class="total-row" style="margin-top:20px; display:flex; justify-content:space-between; align-items:center; background:#f1f5f9; padding:15px; border-radius:4px;">
+            <h2 style="margin:0; font-size:14px;">TOTAL ABONADO</h2>
+            <h2 style="margin:0; font-size:18px; color:#1e293b;">$${total.toLocaleString('es-AR')}</h2>
         </div>
 
-        ${f('rc-obs') ? `<div class="obs"><b>OBSERVACIONES:</b> ${esc(f('rc-obs'))}</div>` : ''}
+        ${f('rc-obs') ? `<div class="obs" style="margin-top:20px; font-size:10px; border:1px solid #e5e7eb; padding:10px; border-radius:4px;"><b>OBSERVACIONES:</b> ${esc(f('rc-obs'))}</div>` : ''}
 
-        <div class="firm">
-            <div class="firm-box">
-                <div class="firm-line"></div>
-                <div class="firm-lbl">Firma Conforme — ${esc(f('rc-de'))}</div>
-                <div class="firm-sub">DNI: ${esc(f('rc-dni'))}</div>
+        <div class="firm" style="margin-top:60px; display:flex; justify-content:space-between;">
+            <div class="firm-box" style="width:45%; text-align:center;">
+                <div style="border-top:1px solid #000; margin-bottom:5px;"></div>
+                <div class="firm-lbl" style="font-weight:700; font-size:10px;">Firma Conforme — ${esc(f('rc-de'))}</div>
+                <div class="firm-sub" style="font-size:9px; color:#64748b;">DNI: ${esc(f('rc-dni'))}</div>
             </div>
-            <div class="firm-box">
-                <div class="firm-line"></div>
-                <div class="firm-lbl">MANDATARIA NACIONAL</div>
-                <div class="firm-sub">Operador: ${esc(f('rc-operador'))}</div>
+            <div class="firm-box" style="width:45%; text-align:center;">
+                <div style="border-top:1px solid #000; margin-bottom:5px;"></div>
+                <div class="firm-lbl" style="font-weight:700; font-size:10px;">MANDATARIA NACIONAL</div>
+                <div class="firm-sub" style="font-size:9px; color:#64748b;">Operador: ${esc(f('rc-operador'))}</div>
             </div>
         </div>
     </body></html>`);
