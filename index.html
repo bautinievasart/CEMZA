@@ -112,7 +112,7 @@
         opacity:0;transition:opacity .15s;
     }
     .nav-item svg{width:16px;height:16px;stroke-width:1.8;flex-shrink:0;min-width:16px;}
-    .nav-label{transition:opacity .2s,max-width .22s;max-width:200px;overflow:hidden;display:inline-block;}
+    .nav-label{flex:1;overflow:hidden;white-space:nowrap;}
     .sidebar.collapsed .nav-label{opacity:0;width:0;}
 
     /* Tooltip en collapsed */
@@ -344,29 +344,23 @@
     </div>
     <div class="nav-items">
     <div class="nav-item active" data-label="Dashboard" onclick="switchView('view-dashboard',this)"><span class="nav-dot"></span><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/></svg>
-        Dashboard
-    </div>
+<span class="nav-label">Dashboard</span>    </div>
     <div class="nav-item" data-label="Inventario" onclick="switchView('view-autos',this)"><span class="nav-dot"></span><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a2.25 2.25 0 0 0-2.25-2.25H15a3 3 0 1 1-6 0H5.25A2.25 2.25 0 0 0 3 12m18 0v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 9m18 0V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v3"/></svg>
-        Inventario
-    </div>
+<span class="nav-label">Inventario</span>    </div>
     <div class="nav-item" data-label="Clientes" onclick="switchView('view-clientes',this)"><span class="nav-dot"></span><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"/></svg>
-        Clientes
-    </div>
-    <div class="nav-item" data-label="Boleto C/V" onclick="switchView('view-boleto',this)"><span class="nav-dot"></span><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/></svg>
-        Boleto C/V
-    </div>
+<span class="nav-label">Clientes</span>    </div>
     <div class="nav-item" data-label="Nota de Pedido" onclick="switchView('view-nota-pedido',this)"><span class="nav-dot"></span><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.375M9 18h3.375m4.5-13.5h-2.25a2.25 2.25 0 0 0-4.5 0H8.25m8.25 0c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125H8.25c-.621 0-1.125-.504-1.125-1.125v-1.5c0-.621.504-1.125 1.125-1.125m8.25 0a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-9A2.25 2.25 0 0 1 5.25 18.75V6.75A2.25 2.25 0 0 1 7.5 4.5h2.25"/></svg>
-        Nota de Pedido
-    </div>
+<span class="nav-label">Nota de Pedido</span>    </div>
+    <div class="nav-item" data-label="Boleto C/V" onclick="switchView('view-boleto',this)"><span class="nav-dot"></span><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/></svg>
+<span class="nav-label">Boleto C/V</span>    </div>
     <div class="nav-item" data-label="Peritaje" onclick="switchView('view-peritaje',this)"><span class="nav-dot"></span><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0 1 18 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3 1.5 1.5 3-3.75"/></svg>
-        Peritaje
-    </div>
+<span class="nav-label">Peritaje</span>    </div>
     <div class="nav-item" data-label="Ventas" onclick="switchView('view-ventas',this)"><span class="nav-dot"></span><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z"/></svg>
-        Registros de Venta
-    </div>
+<span class="nav-label">Registros de Venta</span>    </div>
+    <div class="nav-item" data-label="Recibos" onclick="switchView('view-recibos',this)"><span class="nav-dot"></span><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a3 3 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z"/></svg>
+<span class="nav-label">Recibos</span>    </div>
     <div class="nav-item" data-label="Empleados" onclick="switchView('view-empleados',this)"><span class="nav-dot"></span><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"/></svg>
-        Empleados
-    </div>
+<span class="nav-label">Empleados</span>    </div>
     <div class="sb-footer">
         <div class="sb-version-row">
             <span class="sb-dot"></span>
@@ -477,6 +471,7 @@
             </div>
             <div class="input-group half"></div>
             <div class="checkbox-group"><input type="checkbox" id="v-08"><label>08 Firmado</label></div>
+            <div class="input-group"><label>Vencimiento 08</label><input type="date" id="v-08-vto"></div>
             <div class="checkbox-group"><input type="checkbox" id="v-verif" onchange="toggleVtvDate('v')"><label>Verificado / VTV</label></div>
             <div class="input-group" id="v-vtv-vto-group" style="display:none"><label>Vencimiento VTV</label><input type="date" id="v-vtv-vto"></div>
             <div class="input-group"></div>
@@ -485,6 +480,16 @@
             <div class="input-group" id="v-gnc-oblea-group" style="display:none"><label>Venc. Oblea GNC</label><input type="date" id="v-gnc-oblea"></div>
             <div class="input-group full"><label>Características y Detalles</label><textarea id="v-caract" rows="2" placeholder="Estado general, equipamiento, etc."></textarea></div>
 
+            <div class="section-divider">Notas y Documentación Interna</div>
+            <div class="input-group full"><label>Notas de Gestoría</label><textarea id="v-notas-gestoria" rows="2" placeholder="Anotaciones internas de gestoría, observaciones, pendientes..."></textarea></div>
+            <div class="input-group full">
+                <label>PDF — Título del Auto</label>
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                    <input type="file" id="v-titulo-pdf" accept="application/pdf" style="flex:1;min-width:0;">
+                    <span id="v-titulo-pdf-nombre" style="font-size:12px;color:var(--t3);font-style:italic;"></span>
+                    <button type="button" onclick="verTituloPDF()" class="btn btn-ghost" style="padding:6px 12px;font-size:12px;display:none;" id="btn-ver-titulo">Ver PDF</button>
+                </div>
+            </div>
             <div class="section-divider">Publicación Web</div>
             <div class="input-group full"><label>URLs de Fotos (una por línea)</label><textarea id="v-fotos" rows="3" placeholder="https://i.imgur.com/foto1.jpg&#10;https://i.imgur.com/foto2.jpg&#10;..."></textarea></div>
             <div class="checkbox-group full" style="background:#f0fdf4;border-color:#86efac;">
@@ -746,6 +751,67 @@
     <div id="empleados-lista"></div>
     </div>
 </section>
+
+<!-- ══ RECIBOS ══ -->
+<section id="view-recibos" class="view">
+    <div class="page-head">
+        <div><h1>Recibos</h1><div class="page-sub">Generación de comprobantes de pago</div></div>
+    </div>
+    <div class="page-body">
+        <div class="card">
+            <div class="card-title">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a3 3 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z"/></svg>
+                Datos del Comprobante
+            </div>
+            <div class="grid">
+                <div class="section-divider">Partes</div>
+                <div class="input-group half"><label>Recibí de (Nombre / Razón Social)</label><input type="text" id="rc-de" placeholder="Nombre del pagador"></div>
+                <div class="input-group half"><label>DNI / CUIT</label><input type="text" id="rc-dni" placeholder="Documento"></div>
+                <div class="input-group half"><label>Concepto General</label><input type="text" id="rc-concepto" placeholder="Ej: Seña vehículo, Pago a cuenta..."></div>
+                <div class="input-group half"><label>Fecha</label><input type="date" id="rc-fecha"></div>
+                <div class="input-group half"><label>Forma de Pago</label>
+                    <select id="rc-forma">
+                        <option value="">— Seleccionar —</option>
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Transferencia Bancaria">Transferencia Bancaria</option>
+                        <option value="Cheque">Cheque</option>
+                        <option value="Tarjeta de Débito">Tarjeta de Débito</option>
+                        <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
+                        <option value="Mixto">Mixto</option>
+                    </select>
+                </div>
+                <div class="input-group half"><label>Operador / Responsable</label><input type="text" id="rc-operador" placeholder="Nombre del operador"></div>
+
+                <div class="section-divider">Ítems del Comprobante</div>
+                <div class="full" id="rc-items-container">
+                    <!-- Los ítems se agregan dinámicamente -->
+                </div>
+                <div class="full" style="display:flex;gap:10px;align-items:center;margin-top:2px;">
+                    <button type="button" onclick="addRecibosItem()" class="btn btn-ghost" style="flex:1;">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:15px;height:15px;stroke-width:2;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                        Agregar ítem
+                    </button>
+                </div>
+
+                <div class="full" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+                    <span style="font-size:14px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.4px;">TOTAL</span>
+                    <span id="rc-total-display" style="font-size:24px;font-weight:800;color:var(--accent);">$0</span>
+                </div>
+
+                <div class="input-group full"><label>Observaciones</label><textarea id="rc-obs" rows="2" placeholder="Notas adicionales del comprobante..."></textarea></div>
+
+                <div class="full" style="display:flex;gap:10px;margin-top:4px;">
+                    <button onclick="generarReciboPDF()" class="btn btn-accent" style="flex:1;">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:15px;height:15px;stroke-width:2;"><path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-6 0h.008v.008H12V10.5Zm-3 0h.008v.008H9V10.5Z"/></svg>
+                        Generar Detalle de Pago PDF
+                    </button>
+                    <button onclick="limpiarRecibo()" class="btn btn-ghost" style="flex:0 0 auto;">Limpiar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 
 </main>
 
@@ -1030,6 +1096,7 @@ window.saveAuto = async () => {
         precioInfo: Number(document.getElementById('v-precio-info').value)||0,
         precioCont: Number(document.getElementById('v-precio-cont').value)||0,
         firmado08:  document.getElementById('v-08').checked,
+        vto08:      document.getElementById('v-08-vto').value||'',
         verificado: document.getElementById('v-verif').checked,
         vtvVto:     document.getElementById('v-vtv-vto').value||'',
         gnc:        document.getElementById('v-gnc').checked,
@@ -1037,6 +1104,9 @@ window.saveAuto = async () => {
         gncOblea:   document.getElementById('v-gnc-oblea').value||'',
         combustible:document.getElementById('v-combustible').value,
         caract:     document.getElementById('v-caract').value.trim(),
+        notasGestoria: document.getElementById('v-notas-gestoria').value.trim(),
+        tituloPDFNombre: window._tituloPDFNombre||'',
+        tituloPDFBase64: window._tituloPDFBase64||'',
         publicar_en_web: publicar,
         fotosURL
     };
@@ -1085,6 +1155,7 @@ window.editAuto = id => {
     document.getElementById('v-precio-info').value = a.precioInfo||'';
     document.getElementById('v-precio-cont').value = a.precioCont||'';
     document.getElementById('v-08').checked        = a.firmado08||false;
+    document.getElementById('v-08-vto').value       = a.vto08||'';
     document.getElementById('v-verif').checked     = a.verificado||false;
     document.getElementById('v-vtv-vto').value     = a.vtvVto||'';
     document.getElementById('v-gnc').checked       = a.gnc||false;
@@ -1092,8 +1163,16 @@ window.editAuto = id => {
     document.getElementById('v-gnc-oblea').value   = a.gncOblea||'';
     document.getElementById('v-combustible').value = a.combustible||'';
     document.getElementById('v-caract').value      = a.caract||'';
+    document.getElementById('v-notas-gestoria').value = a.notasGestoria||'';
     document.getElementById('v-fotos').value       = (a.fotosURL||[]).join('\n');
     document.getElementById('v-publicar').checked  = a.publicar_en_web||false;
+    // PDF título
+    window._tituloPDFNombre = a.tituloPDFNombre||'';
+    window._tituloPDFBase64 = a.tituloPDFBase64||'';
+    const btnVerTitulo = document.getElementById('btn-ver-titulo');
+    const spanNombre   = document.getElementById('v-titulo-pdf-nombre');
+    if(a.tituloPDFNombre){ spanNombre.textContent=a.tituloPDFNombre; btnVerTitulo.style.display='inline-flex'; }
+    else { spanNombre.textContent=''; btnVerTitulo.style.display='none'; }
     // Mostrar/ocultar fechas según estado
     toggleVtvDate('v'); toggleGncDates('v');
     document.getElementById('btn-save-auto').innerText        = 'Actualizar Vehículo';
@@ -1103,10 +1182,14 @@ window.editAuto = id => {
 
 window.clearAutoForm = () => {
     document.getElementById('v-id').value='';
-    ['v-marca','v-modelo','v-anio','v-dominio','v-km','v-precio','v-precio-pub','v-precio-info','v-precio-cont','v-caract','v-fotos','v-vtv-vto','v-gnc-tubo','v-gnc-oblea']
+    ['v-marca','v-modelo','v-anio','v-dominio','v-km','v-precio','v-precio-pub','v-precio-info','v-precio-cont','v-caract','v-fotos','v-vtv-vto','v-gnc-tubo','v-gnc-oblea','v-08-vto','v-notas-gestoria']
         .forEach(i=>document.getElementById(i).value='');
     ['v-08','v-verif','v-gnc','v-publicar'].forEach(i=>document.getElementById(i).checked=false);
     document.getElementById('v-combustible').value='';
+    document.getElementById('v-titulo-pdf').value='';
+    document.getElementById('v-titulo-pdf-nombre').textContent='';
+    document.getElementById('btn-ver-titulo').style.display='none';
+    window._tituloPDFNombre=''; window._tituloPDFBase64='';
     ['v-vtv-vto-group','v-gnc-tubo-group','v-gnc-oblea-group'].forEach(i=>document.getElementById(i).style.display='none');
     document.getElementById('btn-save-auto').innerText        = 'Guardar en Stock';
     document.getElementById('btn-cancel-auto').style.display  = 'none';
@@ -1477,6 +1560,181 @@ window.LOGO_IMG = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1
 function esc(s){
     return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
+
+// ── PDF TÍTULO AUTO ───────────────────────────────────────
+window._tituloPDFNombre = '';
+window._tituloPDFBase64 = '';
+
+document.addEventListener('DOMContentLoaded', () => {
+    const inp = document.getElementById('v-titulo-pdf');
+    if(inp) inp.addEventListener('change', () => {
+        const file = inp.files[0];
+        if(!file){ window._tituloPDFNombre=''; window._tituloPDFBase64=''; return; }
+        window._tituloPDFNombre = file.name;
+        document.getElementById('v-titulo-pdf-nombre').textContent = file.name;
+        const reader = new FileReader();
+        reader.onload = e => {
+            window._tituloPDFBase64 = e.target.result; // data:application/pdf;base64,...
+            document.getElementById('btn-ver-titulo').style.display='inline-flex';
+        };
+        reader.readAsDataURL(file);
+    });
+});
+
+window.verTituloPDF = () => {
+    if(!window._tituloPDFBase64){ alert('No hay PDF cargado.'); return; }
+    const win = window.open('');
+    if(win) win.document.write(`<iframe src="${window._tituloPDFBase64}" style="width:100%;height:100vh;border:none;"></iframe>`);
+};
+
+// ── RECIBOS ───────────────────────────────────────────────
+let rcItemCount = 0;
+
+window.addRecibosItem = () => {
+    rcItemCount++;
+    const cont = document.getElementById('rc-items-container');
+    const div = document.createElement('div');
+    div.id = `rc-item-${rcItemCount}`;
+    div.style.cssText = 'display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:end;margin-bottom:10px;';
+    div.innerHTML = `
+        <div class="input-group">
+            <label>Descripción del ítem</label>
+            <input type="text" class="rc-item-desc" placeholder="Ej: Seña vehículo, Honorarios, etc.">
+        </div>
+        <div class="input-group">
+            <label>Importe ($)</label>
+            <input type="number" class="rc-item-monto" placeholder="0" oninput="calcTotalRecibo()" style="width:140px;">
+        </div>
+        <button type="button" onclick="removeRecibosItem(${rcItemCount})"
+            style="padding:8px 12px;background:var(--err-bg);color:var(--err-t);border:1px solid rgba(220,38,38,.2);border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;height:40px;align-self:end;">✕</button>`;
+    cont.appendChild(div);
+    calcTotalRecibo();
+};
+
+window.removeRecibosItem = (id) => {
+    const el = document.getElementById(`rc-item-${id}`);
+    if(el){ el.remove(); calcTotalRecibo(); }
+};
+
+window.calcTotalRecibo = () => {
+    let total = 0;
+    document.querySelectorAll('.rc-item-monto').forEach(i => total += Number(i.value)||0);
+    document.getElementById('rc-total-display').textContent = '$' + total.toLocaleString('es-AR');
+};
+
+window.limpiarRecibo = () => {
+    ['rc-de','rc-dni','rc-concepto','rc-obs'].forEach(id=>{ const e=document.getElementById(id); if(e) e.value=''; });
+    const f=document.getElementById('rc-fecha'); if(f) f.value='';
+    const fm=document.getElementById('rc-forma'); if(fm) fm.value='';
+    const op=document.getElementById('rc-operador'); if(op) op.value='';
+    document.getElementById('rc-items-container').innerHTML='';
+    document.getElementById('rc-total-display').textContent='$0';
+    rcItemCount=0;
+};
+
+window.generarReciboPDF = () => {
+    const items = [];
+    document.querySelectorAll('#rc-items-container > div').forEach(div => {
+        const desc  = div.querySelector('.rc-item-desc')?.value.trim()||'';
+        const monto = Number(div.querySelector('.rc-item-monto')?.value)||0;
+        if(desc||monto) items.push({desc, monto});
+    });
+    if(!items.length){ alert('Agregá al menos un ítem antes de generar el PDF.'); return; }
+
+    const f = id => document.getElementById(id)?.value??'';
+    const total = items.reduce((s,i)=>s+i.monto,0);
+    const recibo_num = 'RC-' + Date.now().toString().slice(-6);
+    const fecha = f('rc-fecha') || new Date().toLocaleDateString('es-AR');
+
+    const win = window.open('','_blank');
+    if(!win){ alert('Permitir ventanas emergentes para imprimir.'); return; }
+
+    const DS = `<style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+        @page{size:A4;margin:0;}
+        body{font-family:'DM Sans',sans-serif;padding:22px;color:#0d1117;background:#fff;width:210mm;font-size:10px;}
+        .hdr{border-bottom:3px solid #2563eb;padding-bottom:7px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;}
+        .hdr h1{margin:0;font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:-.5px;}
+        .brand{color:#2563eb;}
+        .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+        .ib{padding:6px 8px;border:1px solid #f1f5f9;border-radius:5px;background:#f8fafc;}
+        .ib b{display:block;font-size:7.5px;color:#8b949e;text-transform:uppercase;margin-bottom:2px;}
+        .ib span{font-size:11px;font-weight:600;}
+        .sh{font-size:9px;font-weight:700;color:#2563eb;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #e1e7ef;padding-bottom:3px;margin:10px 0 6px;}
+        .items-table{width:100%;border-collapse:collapse;}
+        .items-table th{text-align:left;padding:6px 8px;background:#f1f5f9;font-size:8px;font-weight:700;color:#64748b;text-transform:uppercase;}
+        .items-table td{padding:8px;border-bottom:1px solid #f1f5f9;font-size:11px;}
+        .items-table td:last-child{text-align:right;font-weight:600;}
+        .total-row{background:#0d1117;color:white;padding:12px;border-radius:6px;display:flex;justify-content:space-between;margin-top:10px;}
+        .total-row h2{margin:0;font-size:14px;font-weight:700;}
+        .obs{margin-top:10px;padding:7px;background:#f8fafc;border:1px solid #e1e7ef;border-radius:5px;font-size:9px;}
+        .firm{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:24px;border-top:1px solid #dde3ec;padding-top:14px;}
+        .firm-box{text-align:center;}
+        .firm-line{border-top:1px solid #0d1117;margin:38px auto 5px;width:80%;}
+        .firm-lbl{font-size:9px;font-weight:700;text-transform:uppercase;}
+        .firm-sub{font-size:7.5px;color:#8b949e;}
+        .np{position:fixed;top:10px;right:10px;background:#2563eb;color:white;padding:7px 14px;border:none;border-radius:6px;cursor:pointer;font-weight:600;z-index:1000;}
+        .wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:78%;opacity:0.08;mix-blend-mode:screen;pointer-events:none;}
+        @media print{.np{display:none;}}
+    </style>`;
+
+    const itemsHTML = items.map((it,i) => `
+        <tr>
+            <td style="color:#64748b;">${i+1}</td>
+            <td>${esc(it.desc)}</td>
+            <td>$${it.monto.toLocaleString('es-AR')}</td>
+        </tr>`).join('');
+
+    win.document.write(`<html><head>${DS}</head><body>
+        <button onclick="window.print()" class="np">Imprimir</button>
+        <img class="wm" src="${window.LOGO_IMG}" alt="">
+        <div class="hdr">
+            <img src="${window.LOGO_IMG}" style="height:58px;object-fit:contain;mix-blend-mode:screen;">
+            <div style="text-align:center;flex:1;">
+                <h1>DETALLE DE <span class="brand">PAGO</span></h1>
+                <div style="font-size:9px;color:#64748b;">Comprobante Interno</div>
+            </div>
+            <div style="text-align:right;font-size:9px;">
+                <b>Nº ${recibo_num}</b><br>
+                FECHA: ${esc(fecha)}
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="ib"><b>Recibí de</b><span>${esc(f('rc-de'))}</span></div>
+            <div class="ib"><b>DNI / CUIT</b><span>${esc(f('rc-dni'))}</span></div>
+            <div class="ib"><b>Concepto</b><span>${esc(f('rc-concepto'))}</span></div>
+            <div class="ib"><b>Forma de Pago</b><span>${esc(f('rc-forma'))}</span></div>
+        </div>
+
+        <div class="sh">Desglose de Importes</div>
+        <table class="items-table">
+            <thead><tr><th>#</th><th>Descripción</th><th style="text-align:right;">Importe</th></tr></thead>
+            <tbody>${itemsHTML}</tbody>
+        </table>
+
+        <div class="total-row">
+            <h2>TOTAL ABONADO</h2>
+            <h2>$${total.toLocaleString('es-AR')}</h2>
+        </div>
+
+        ${f('rc-obs') ? `<div class="obs"><b>OBSERVACIONES:</b> ${esc(f('rc-obs'))}</div>` : ''}
+
+        <div class="firm">
+            <div class="firm-box">
+                <div class="firm-line"></div>
+                <div class="firm-lbl">Firma Conforme — ${esc(f('rc-de'))}</div>
+                <div class="firm-sub">DNI: ${esc(f('rc-dni'))}</div>
+            </div>
+            <div class="firm-box">
+                <div class="firm-line"></div>
+                <div class="firm-lbl">CEMZA Automotores S.A.</div>
+                <div class="firm-sub">Operador: ${esc(f('rc-operador'))}</div>
+            </div>
+        </div>
+    </body></html>`);
+    win.document.close();
+};
 function toggleVtvDate(prefix){
     const chk = document.getElementById(prefix+'-verif');
     const grp = document.getElementById(prefix+'-vtv-vto-group');
@@ -1678,31 +1936,33 @@ function generatePeritajePDF(){
     win.document.close();
 }
 
-document.addEventListener('DOMContentLoaded', buildChecklist);
+document.addEventListener('DOMContentLoaded', () => {
+    buildChecklist();
+    addRecibosItem(); // ítem inicial
+});
 </script>
 <!-- ══ BOTTOM NAV MOBILE ══ -->
 <div class="bottom-nav">
   <div class="bottom-nav-inner">
     <div class="bn-item active" onclick="switchView('view-dashboard',this);closeSidebar();" id="bn-dashboard">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6Z"/></svg>
-      Inicio
-    </div>
+<span class="nav-label">Inicio</span>    </div>
     <div class="bn-item" onclick="switchView('view-autos',this);closeSidebar();" id="bn-autos">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a2.25 2.25 0 0 0-2.25-2.25H15a3 3 0 1 1-6 0H5.25A2.25 2.25 0 0 0 3 12m18 0v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6m18 0V9M3 12V9"/></svg>
-      Stock
-    </div>
+<span class="nav-label">Stock</span>    </div>
     <div class="bn-item" onclick="switchView('view-ventas',this);closeSidebar();" id="bn-ventas">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
-      Ventas
-    </div>
+<span class="nav-label">Ventas</span>    </div>
     <div class="bn-item" onclick="switchView('view-clientes',this);closeSidebar();" id="bn-clientes">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Z"/></svg>
-      Clientes
+<span class="nav-label">Clientes</span>    </div>
+    <div class="bn-item" onclick="switchView('view-recibos',this);closeSidebar();" id="bn-recibos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a3 3 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z"/></svg>
+      Recibos
     </div>
     <div class="bn-item" onclick="switchView('view-empleados',this);closeSidebar();" id="bn-empleados">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"/></svg>
-      Empleados
-    </div>
+<span class="nav-label">Empleados</span>    </div>
   </div>
 </div>
 
@@ -1739,7 +1999,7 @@ window.switchView = function(id, el){
     const map = {
         'view-dashboard':'bn-dashboard','view-autos':'bn-autos','view-clientes':'bn-clientes',
         'view-boleto':'bn-boleto','view-nota-pedido':'bn-nota',
-        'view-peritaje':'bn-peritaje','view-ventas':'bn-ventas','view-empleados':'bn-empleados'
+        'view-peritaje':'bn-peritaje','view-ventas':'bn-ventas','view-recibos':'bn-recibos','view-empleados':'bn-empleados'
     };
     const bn = document.getElementById(map[id]);
     if(bn) bn.classList.add('active');
