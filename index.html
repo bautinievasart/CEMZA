@@ -1694,9 +1694,15 @@ window.generarReciboPDF = () => {
                 <h1>DETALLE DE <span class="brand">PAGO</span></h1>
                 <div style="font-size:9px;color:#64748b;">Comprobante Interno</div>
             </div>
-            <div style="text-align:right;font-size:9px;">
-                <b>Nº ${recibo_num}</b><br>
-                FECHA: ${esc(fecha)}
+            
+            <div style="text-align:right;font-size:9px;line-height:1.4;color:#374151;">
+                <div style="font-weight:700;color:#0d1117;font-size:10px;">MANDATARIA NACIONAL</div>
+                <div>Mat. M202027352343566DN</div>
+                <div>03571 - 15525028</div>
+                <div>angybanti@gmail.com</div>
+                <div>Malvinas Argentinas 290</div>
+                <div>Embalse, Córdoba</div>
+                <div style="margin-top:4px;font-weight:600;color:#0d1117;font-size:10px;">Nº ${recibo_num} · ${esc(fecha)}</div>
             </div>
         </div>
 
